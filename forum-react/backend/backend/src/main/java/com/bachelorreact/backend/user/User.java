@@ -22,14 +22,12 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     //@JdbcType(VarcharJdbcType.class)
     private UUID id;
-    @Column(name = "username", columnDefinition = "VARCHAR(255)", unique = true)
     private String username;
-    @Column(name = "displayname", columnDefinition = "VARCHAR(255)")
     private String displayname;
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "_user", cascade = CascadeType.ALL)
     private Set<Post> posts;
 
     public User(UUID id, String username, String displayname, String password, UserRole userRole, Set<Post> posts) {

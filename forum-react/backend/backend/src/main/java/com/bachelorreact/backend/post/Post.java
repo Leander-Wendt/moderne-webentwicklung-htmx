@@ -15,14 +15,11 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @Column(name = "title", columnDefinition = "VARCHAR(255)")
     private String title;
-    @Column(name = "body", columnDefinition = "VARCHAR(1024)")
     private String body;
     private Date created_at;
     private Date updated_at;
     @ManyToOne
-    @JoinColumn(name = "user_id")
     private User user;
     private String author_name = user.getDisplayname();
 
