@@ -1,5 +1,6 @@
 package com.bachelorreact.backend.user;
 
+import com.bachelorreact.backend.comment.Comment;
 import com.bachelorreact.backend.post.Post;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -7,36 +8,37 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
-@Entity
+@Entity(name = "_user")
 @Builder
-@Table(name = "_user")
 
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    //@JdbcType(VarcharJdbcType.class)
     private UUID id;
     private String username;
     private String displayname;
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
-    @OneToMany(mappedBy = "_user", cascade = CascadeType.ALL)
-    private Set<Post> posts;
+    @OneToMany(mappedBy = "author")
+    private List<Post> posts;
+    @OneToMany(mappedBy = "author")
+    private List<Comment> comments;
 
-    public User(UUID id, String username, String displayname, String password, UserRole userRole, Set<Post> posts) {
+    public User(UUID id, String username, String displayname, String password, UserRole userRole, List<Post> posts, List<Comment> comments) {
         this.id = id;
         this.username = username;
         this.displayname = displayname;
         this.password = password;
         this.userRole = userRole;
         this.posts = posts;
+        this.comments = comments;
     }
 
     public User(String username, String password, UserRole userRole, String displayname) {
@@ -45,6 +47,8 @@ public class User implements UserDetails {
         this.password = password;
         this.userRole = userRole;
         this.displayname = displayname;
+        this.posts = new ArrayList<>();
+        this.comments = new ArrayList<>();
     }
 
     public User() {
