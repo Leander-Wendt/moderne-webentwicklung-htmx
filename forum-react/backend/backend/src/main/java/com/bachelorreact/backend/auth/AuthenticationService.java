@@ -4,14 +4,13 @@ import com.bachelorreact.backend.config.JwtService;
 import com.bachelorreact.backend.user.User;
 import com.bachelorreact.backend.user.UserRepository;
 import com.bachelorreact.backend.user.UserRole;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class AuthenticationService {
     private final UserRepository repository;
 
@@ -19,6 +18,13 @@ public class AuthenticationService {
     private final JwtService jwtService;
 
     private final AuthenticationManager authenticationManager;
+
+    public AuthenticationService(UserRepository repository, JwtService jwtService, AuthenticationManager authenticationManager) {
+        this.repository = repository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
+    }
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
