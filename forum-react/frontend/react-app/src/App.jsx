@@ -1,12 +1,14 @@
-import Alert from "./components/Alert";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Register2 } from "./components/Register2";
 
 function App() {
 	return (
-		<div>
-			<Alert>
-				<p>Hello World</p>
-			</Alert>
-		</div>
+		<BrowserRouter>
+			<Routes>
+				<Route path="/" element={<h1>Hello World</h1>} />
+				<Route path="/register" element={<Register2 />} />
+			</Routes>
+		</BrowserRouter>
 	);
 }
 
