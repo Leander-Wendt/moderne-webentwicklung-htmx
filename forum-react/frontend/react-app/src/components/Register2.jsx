@@ -11,7 +11,6 @@ export const Register2 = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    alert(JSON.stringify(inputs));
     fetch("http://localhost:8080/api/v1/auth/register", {
       method: "post",
       headers: {
@@ -20,7 +19,7 @@ export const Register2 = () => {
       },
       body: JSON.stringify(inputs),
     }).then((res) => {
-      console.log(res.json());
+      console.log(res);
     });
   };
   // Styling source: https://tailwindui.com/components/application-ui/forms/sign-in-forms
@@ -83,7 +82,7 @@ export const Register2 = () => {
             </div>
             <div>
               <label
-                htmlFor="displayname"
+                htmlFor="password"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Password
@@ -102,7 +101,7 @@ export const Register2 = () => {
               <div className="mt-2">
                 <input
                   type="submit"
-                  value={"Registrieren"}
+                  value={"Register"}
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 />
               </div>
