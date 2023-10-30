@@ -1,6 +1,7 @@
 package com.bachelorreact.backend.auth;
 
 import com.bachelorreact.backend.config.JwtService;
+import com.bachelorreact.backend.exception.ApiConflictException;
 import com.bachelorreact.backend.user.User;
 import com.bachelorreact.backend.user.UserRepository;
 import com.bachelorreact.backend.user.UserRole;
@@ -27,6 +28,9 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse register(RegisterRequest request) {
+        if (repository.getUserByUsername(request.getUsername()) != null){
+            throw new ApiConflictException("Username already taken");
+        }
         var user = User.builder()
                 .username(request.getUsername())
                 .displayname(request.getDisplayname())

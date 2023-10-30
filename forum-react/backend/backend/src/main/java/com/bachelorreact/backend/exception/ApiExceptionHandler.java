@@ -17,4 +17,12 @@ public class ApiExceptionHandler {
         );
         return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value = {ApiConflictException.class})
+    public ResponseEntity<Object> handleApiConflictException(ApiConflictException exception) {
+        ApiException apiException = new ApiException(
+                exception.getMessage(), exception, HttpStatus.CONFLICT, ZonedDateTime.now(ZoneId.of("UTC+2"))
+        );
+        return new ResponseEntity<>(apiException, HttpStatus.CONFLICT);
+    }
 }
