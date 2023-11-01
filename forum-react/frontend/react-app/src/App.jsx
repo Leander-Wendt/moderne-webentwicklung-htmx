@@ -3,12 +3,13 @@ import { Register2 } from "./components/Register2";
 import { Login } from "./components/Login";
 import { Navbar } from "./components/Navbar";
 import { Posts } from "./components/Posts";
+import { Counter } from "./components/Counter";
 
 function App() {
   return (
     <>
-      <Navbar />
       <BrowserRouter>
+        <Navbar />
         <Routes>
           <Route path="/" element={<Posts />} />
           <Route path="/register" element={<Register2 />} />
