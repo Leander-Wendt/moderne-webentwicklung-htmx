@@ -16,7 +16,7 @@ export const registerUser = createAsyncThunk(
       })
         .then((res) => res.json())
         .then((body) => {
-          localStorage.setItem("jwt", body.token);
+          localStorage.setItem("userToken", body.token);
           return body;
         });
       return data;
@@ -48,7 +48,7 @@ export const loginUser = createAsyncThunk(
       )
         .then((res) => res.json())
         .then((body) => {
-          localStorage.setItem("jwt", body.token);
+          localStorage.setItem("userToken", body.token);
         });
       return data;
     } catch (error) {

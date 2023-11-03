@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { registerUser } from "./userActions";
 
 const userToken = localStorage.getItem("userToken")
-  ? localStorage.getItem("jwt")
+  ? localStorage.getItem("userToken")
   : null;
 
 const initialState = {
@@ -18,7 +18,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      localStorage.removeItem("userToken"); // deletes token from storage
+      localStorage.removeItem("userToken");
       state.loading = false;
       state.userInfo = null;
       state.userToken = null;
@@ -34,7 +34,7 @@ const userSlice = createSlice({
       state.loading = false;
       state.success = true;
       state.userInfo = payload;
-      state.jwt = payload.token;
+      state.userToken = payload.token;
     },
     [registerUser.rejected]: (state, { payload }) => {
       state.loading = false;
@@ -43,4 +43,5 @@ const userSlice = createSlice({
   },
 });
 
+export const { logout } = userSlice.actions;
 export default userSlice.reducer;
