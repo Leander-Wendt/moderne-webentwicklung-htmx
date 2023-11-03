@@ -1,7 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { loginUser } from "./user/userActions";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
   const [inputs, setInputs] = useState({});
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { userToken } = useSelector((state) => state.user);
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -9,19 +16,15 @@ export const Login = () => {
     setInputs((values) => ({ ...values, [name]: value }));
   };
 
+  useEffect(() => {
+    if (userToken) {
+      navigate("/");
+    }
+  }, [navigate, userToken]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    // alert(JSON.stringify(inputs));
-    fetch("http://localhost:8080/api/v1/auth/register", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "http://localhost:8080",
-      },
-      body: JSON.stringify(inputs),
-    }).then((res) => {
-      console.log(res);
-    });
+    dispatch(loginUser(inputs));
   };
   // Styling source: https://tailwindui.com/components/application-ui/forms/sign-in-forms
   return (
