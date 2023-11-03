@@ -25,21 +25,22 @@ const userSlice = createSlice({
       state.error = null;
     },
   },
-  extraReducers: {
-    [registerUser.pending]: (state) => {
-      state.loading = true;
-      state.error = null;
-    },
-    [registerUser.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.success = true;
-      state.userInfo = payload;
-      state.userToken = payload.token;
-    },
-    [registerUser.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.error = payload;
-    },
+  extraReducers: (builder) => {
+    builder
+      .addCase(registerUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(registerUser.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.success = true;
+        state.userInfo = payload;
+        state.userToken = payload.token;
+      })
+      .addCase(registerUser.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload;
+      });
   },
 });
 
