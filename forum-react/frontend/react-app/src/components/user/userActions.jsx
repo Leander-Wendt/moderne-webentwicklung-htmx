@@ -34,9 +34,8 @@ export const registerUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   "auth/login",
   async ({ username, password }, { rejectWithValue }) => {
-    console.log(username);
     try {
-      let data = await fetch(`${backendURL}/api/v1/auth/register`, {
+      let data = await fetch(`${backendURL}/api/v1/auth/login`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
