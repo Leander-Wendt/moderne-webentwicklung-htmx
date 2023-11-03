@@ -34,21 +34,20 @@ export const registerUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   "auth/login",
   async ({ username, password }, { rejectWithValue }) => {
+    console.log(username);
     try {
-      const config = {
+      let data = await fetch(`${backendURL}/api/v1/auth/register`, {
+        method: "post",
         headers: {
           "Content-Type": "application/json",
           credentials: "include",
         },
-      };
-      let data = await fetch(
-        `${backendURL}/api/v1/auth/login`,
-        { method: "post", config },
-        { username, password }
-      )
+        body: JSON.stringify({ username, password }),
+      })
         .then((res) => res.json())
         .then((body) => {
           localStorage.setItem("userToken", body.token);
+          return body;
         });
       return data;
     } catch (error) {
