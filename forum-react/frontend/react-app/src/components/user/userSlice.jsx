@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { registerUser } from "./userActions";
+import { registerUser, loginUser } from "./userActions";
 
 const userToken = localStorage.getItem("userToken")
   ? localStorage.getItem("userToken")
@@ -38,6 +38,20 @@ const userSlice = createSlice({
         state.userToken = payload.token;
       })
       .addCase(registerUser.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload;
+      })
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.success = true;
+        state.userInfo = payload;
+        state.userToken = payload.token;
+      })
+      .addCase(loginUser.rejected, (state, { payload }) => {
         state.loading = false;
         state.error = payload;
       });
