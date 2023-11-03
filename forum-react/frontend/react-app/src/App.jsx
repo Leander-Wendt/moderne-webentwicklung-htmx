@@ -5,9 +5,6 @@ import { Navbar } from "./components/Navbar";
 import { Posts } from "./components/Posts";
 // TODO:
 // Form validation for Login / Register
-// Cross Link between Login / Register
-// Store JWT in redux store, implement logout
-// View all Posts
 // Crud Post
 // Crud Comment (delete comments from project?)
 function App() {
