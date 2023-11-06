@@ -2,19 +2,24 @@ import { useState, useEffect } from "react";
 import { loginUser } from "./user/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { LOCATION_CHANGE } from "./user/userSlice";
 
 export const Login = () => {
   const [inputs, setInputs] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { userToken } = useSelector((state) => state.user);
+  const { userToken, error } = useSelector((state) => state.user);
 
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
     setInputs((values) => ({ ...values, [name]: value }));
   };
+
+  useEffect(() => {
+    dispatch(LOCATION_CHANGE());
+  }, []);
 
   useEffect(() => {
     if (userToken) {
@@ -80,6 +85,11 @@ export const Login = () => {
                   onChange={handleChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
+                {error && (
+                  <p style={{ color: "red", textAlign: "center" }}>
+                    Credentials don't match.
+                  </p>
+                )}
               </div>
               <div className="mt-2">
                 <input
