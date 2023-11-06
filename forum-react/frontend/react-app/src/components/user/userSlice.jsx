@@ -7,10 +7,10 @@ const userToken = localStorage.getItem("userToken")
 
 const initialState = {
   loading: false,
-  userInfo: null, // for user object
-  userToken: null, // for storing the JWT
+  userInfo: null,
+  userToken: null,
   error: null,
-  success: false, // for monitoring the registration process.
+  success: false,
 };
 
 const userSlice = createSlice({
@@ -23,6 +23,11 @@ const userSlice = createSlice({
       state.userInfo = null;
       state.userToken = null;
       state.error = null;
+    },
+    LOCATION_CHANGE: (state) => {
+      state.loading = false;
+      state.error = null;
+      state.success = false;
     },
   },
   extraReducers: (builder) => {
@@ -58,5 +63,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { logout } = userSlice.actions;
+export const { logout, LOCATION_CHANGE } = userSlice.actions;
 export default userSlice.reducer;
