@@ -16,6 +16,9 @@ function App() {
           <Route path="/" element={<Posts />} />
           <Route path="/register" element={<Register2 />} />
           <Route path="/login" element={<Login />} />
+          {/*<Route element={<ProtectedRoute />}>
+            <Route path='/post/new' element={<CreatePost />} />
+          </Route>*/}
         </Routes>
       </BrowserRouter>
     </>
