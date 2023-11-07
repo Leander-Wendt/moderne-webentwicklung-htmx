@@ -25,7 +25,7 @@ export const Navbar = () => {
   const handleLogout = () => {
     dispatch(logout());
   };
-
+  // Source: https://tailwindui.com/components/application-ui/application-shells/stacked
   return (
     <Disclosure as="nav" className="bg-gray-800 top-0 sticky">
       {({ open }) => (
