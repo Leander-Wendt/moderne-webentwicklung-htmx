@@ -4,7 +4,7 @@ import { registerUser } from "./user/userActions";
 import { useNavigate } from "react-router-dom";
 import { LOCATION_CHANGE } from "./user/userSlice";
 
-export const Register2 = () => {
+export const Register = () => {
   const USER_REGEX = /^\S{2,23}$/;
   const PASSWORD_REGEX = /^\S{8,39}$/;
 
