@@ -1,10 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Register2 } from "./components/Register2";
+import { Register } from "./components/Register";
 import { Login } from "./components/Login";
 import { Navbar } from "./components/Navbar";
 import { Posts } from "./components/Posts";
+import { Post } from "./components/Post";
+import { PageError } from "./components/PageError";
+import { ProtectedRoute } from "./routes/ProtectedRoute";
+import { CreatePost } from "./components/CreatePost";
 // TODO:
-// Form validation for Login / Register
 // Crud Post
 // Crud Comment (delete comments from project?)
 function App() {
@@ -14,11 +17,13 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Posts />} />
-          <Route path="/register" element={<Register2 />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          {/*<Route element={<ProtectedRoute />}>
-            <Route path='/post/new' element={<CreatePost />} />
-          </Route>*/}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/post/new" element={<CreatePost />} />
+          </Route>
+          <Route path="/post/:id" element={<Post />} />
+          <Route path="*" element={<PageError />} />
         </Routes>
       </BrowserRouter>
     </>
