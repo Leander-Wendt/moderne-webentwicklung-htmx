@@ -73,12 +73,22 @@ export const Navbar = () => {
                   <div className="hidden sm:ml-4 sm:block">
                     <div className="flex space-x-4">
                       {userToken ? (
-                        <p
-                          className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                          onClick={handleLogout}
-                        >
-                          Logout
-                        </p>
+                        <>
+                          <NavLink
+                            key={"Create Post"}
+                            to={"/post/new"}
+                            className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                            aria-current={"Create Post"}
+                          >
+                            Create Post
+                          </NavLink>
+                          <p
+                            className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                            onClick={handleLogout}
+                          >
+                            Logout
+                          </p>
+                        </>
                       ) : (
                         authRoutes.map((item) => {
                           return (
