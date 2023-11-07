@@ -5,24 +5,37 @@ import { useNavigate } from "react-router-dom";
 import { LOCATION_CHANGE } from "./user/userSlice";
 
 export const Register2 = () => {
-  const USER_REGEX = /^[.]{2,23}$/;
-  const PWD_REGEX = /^[.]{8,40}$/;
-  const [inputs, setInputs] = useState({});
+  const USER_REGEX = /^\S{2,23}$/;
+  const PASSWORD_REGEX = /^\S{8,39}$/;
+
+  const [userName, setUserName] = useState("");
+  const [validName, setValidName] = useState(false);
+  const [userFocus, setUserFocus] = useState(false);
+
+  const [displayName, setDisplayName] = useState("");
+
+  const [password, setPassword] = useState("");
+  const [validPassword, setValidPassword] = useState(false);
+  const [passwordFocus, setPasswordFocus] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { loading, userToken, error, success } = useSelector(
     (state) => state.user
   );
 
-  const handleChange = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    setInputs((values) => ({ ...values, [name]: value }));
-  };
-
   useEffect(() => {
     dispatch(LOCATION_CHANGE());
   }, []);
+
+  useEffect(() => {
+    setValidName(USER_REGEX.test(userName));
+  }, [userName]);
+
+  useEffect(() => {
+    setValidPassword(PASSWORD_REGEX.test(password));
+  }, [password]);
 
   useEffect(() => {
     if (userToken) {
@@ -32,7 +45,14 @@ export const Register2 = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(registerUser(inputs));
+
+    dispatch(
+      registerUser({
+        username: userName,
+        displayname: displayName ?? userName,
+        password: password,
+      })
+    );
   };
   // Styling source: https://tailwindui.com/components/application-ui/forms/sign-in-forms
   return (
@@ -60,16 +80,26 @@ export const Register2 = () => {
                 >
                   Username
                 </label>
+                {userFocus && userName && !validName && (
+                  <p
+                    id="usernameHint"
+                    style={{ color: "black", textAlign: "center" }}
+                  >
+                    2 to 24 characters.
+                  </p>
+                )}
                 <div className="mt-2">
                   <input
                     type="text"
                     name="username"
                     id="username"
                     autoComplete="off"
-                    value={inputs.username || ""}
+                    value={userName}
                     required
-                    onChange={handleChange}
+                    onChange={(e) => setUserName(e.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    onFocus={() => setUserFocus(true)}
+                    onBlur={() => setUserFocus(false)}
                   />
                   {error && (
                     <h2 style={{ color: "red", textAlign: "center" }}>
@@ -85,7 +115,7 @@ export const Register2 = () => {
                     htmlFor="displayname"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
-                    Displayname
+                    Displayname (optional)
                   </label>
                 </div>
                 <div className="mt-2">
@@ -93,9 +123,8 @@ export const Register2 = () => {
                     type="text"
                     name="displayname"
                     autoComplete="off"
-                    value={inputs.displayname || ""}
-                    required
-                    onChange={handleChange}
+                    value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -107,22 +136,36 @@ export const Register2 = () => {
                 >
                   Password
                 </label>
+                {passwordFocus && password && !validPassword && (
+                  <p
+                    id="passwordHint"
+                    style={{ color: "black", textAlign: "center" }}
+                  >
+                    8 to 40 characters.
+                  </p>
+                )}
                 <div className="mt-2">
                   <input
                     type="password"
                     name="password"
                     autoComplete="off"
-                    value={inputs.password || ""}
+                    value={password}
                     required
-                    onChange={handleChange}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    onFocus={() => setPasswordFocus(true)}
+                    onBlur={() => setPasswordFocus(false)}
                   />
                 </div>
                 <div className="mt-2">
                   <input
                     type="submit"
                     value={"Register"}
-                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    className={
+                      validName && validPassword
+                        ? "flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        : "flex w-full justify-center rounded-md bg-gray-200 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                    }
                   />
                 </div>
               </div>
