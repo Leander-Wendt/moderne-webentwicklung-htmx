@@ -1,4 +1,3 @@
-// ProtectedRoute.js
 import { useSelector } from "react-redux";
 import { NavLink, Outlet } from "react-router-dom";
 
