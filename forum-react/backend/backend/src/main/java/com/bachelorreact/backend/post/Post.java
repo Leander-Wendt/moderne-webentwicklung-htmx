@@ -41,6 +41,14 @@ public class Post {
         this.comments = comments;
     }
 
+    public Post(String title, String body, User author) {
+        this.title = title;
+        this.body = body;
+        this.author = author;
+        this.created_at = new Date();
+        this.updated_at = new Date();
+    }
+
     public User getUser() {
         return author;
     }
