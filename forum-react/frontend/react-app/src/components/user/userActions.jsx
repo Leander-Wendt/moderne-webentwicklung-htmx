@@ -64,3 +64,36 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
+
+export const createPost = createAsyncThunk(
+  "post/create",
+  async ({ title, body, userToken }, { rejectWithValue }) => {
+    try {
+      let data = await fetch(`${backendURL}/posts`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userToken}`,
+          "Access-Control-Allow-Origin": "http://localhost:8080",
+        },
+        body: JSON.stringify({
+          title: title,
+          body: body,
+          created_at: Date.now(),
+          updated_at: Date.now(),
+        }),
+      })
+        .then((res) => res.json())
+        .then((body) => {
+          return body;
+        });
+      return data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
