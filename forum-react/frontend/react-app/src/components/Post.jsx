@@ -1,8 +1,8 @@
 export const Post = () => {
   return (
     <>
-      <div class="relative mt-20 mx-10 max-w-container px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col">
+      <div className="relative mt-20 mx-10 max-w-container px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col">
           <h1 className="mt-3 text-5xl font-bold tracking-tight text-slate-900">
             Title
           </h1>
