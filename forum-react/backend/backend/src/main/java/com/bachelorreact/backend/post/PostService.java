@@ -1,5 +1,8 @@
 package com.bachelorreact.backend.post;
 
+import com.bachelorreact.backend.config.JwtService;
+import com.bachelorreact.backend.user.User;
+import com.bachelorreact.backend.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +14,14 @@ import java.util.UUID;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
-    public PostService(PostRepository postRepository) {
+    private final JwtService jwtService;
+
+    public PostService(PostRepository postRepository, UserRepository userRepository, JwtService jwtService) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
+        this.jwtService = jwtService;
     }
 
     public List<Post> getPosts() {
@@ -24,7 +32,9 @@ public class PostService {
         return postRepository.getReferenceById(id);
     }
 
-    public void addPost(Post post) {
+    public void addPost(Post post, String token) {
+        User user = userRepository.findByUsername(jwtService.extractUsername(token.split(" ")[1])).get();
+        post.setAuthor(user);
         postRepository.save(post);
     }
 
