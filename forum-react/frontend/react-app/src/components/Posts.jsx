@@ -1,91 +1,104 @@
 import { NavLink } from "react-router-dom";
-
-const people = [
-  {
-    name: "Leslie Alexander",
-    email: "leslie.alexander@example.com",
-    role: "Co-Founder / CEO",
-    imageUrl:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    lastSeen: "3h ago",
-    lastSeenDateTime: "2023-01-23T13:23Z",
-  },
-  {
-    name: "Michael Foster",
-    email: "michael.foster@example.com",
-    role: "Co-Founder / CTO",
-    imageUrl:
-      "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    lastSeen: "3h ago",
-    lastSeenDateTime: "2023-01-23T13:23Z",
-  },
-  {
-    name: "Dries Vincent",
-    email: "dries.vincent@example.com",
-    role: "Business Relations",
-    imageUrl:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    lastSeen: null,
-  },
-  {
-    name: "Lindsay Walton",
-    email: "lindsay.walton@example.com",
-    role: "Front-end Developer",
-    imageUrl:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    lastSeen: "3h ago",
-    lastSeenDateTime: "2023-01-23T13:23Z",
-  },
-  {
-    name: "Courtney Henry",
-    email: "courtney.henry@example.com",
-    role: "Designer",
-    imageUrl:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    lastSeen: "3h ago",
-    lastSeenDateTime: "2023-01-23T13:23Z",
-  },
-  {
-    name: "Tom Cook",
-    email: "tom.cook@example.com",
-    role: "Director of Product",
-    imageUrl:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    lastSeen: null,
-  },
-];
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { LOCATION_CHANGE } from "./user/userSlice";
+import { useNavigate } from "react-router-dom";
 
 export const Posts = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [posts, setPosts] = useState();
+  const { userToken } = useSelector((state) => state.user);
+  const backendURL = "http://127.0.0.1:8080";
+
+  const fetchAllPosts = async () => {
+    try {
+      fetch(`${backendURL}/posts`, {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "http://localhost:8080",
+        },
+      })
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          } else {
+            throw new Error("Error");
+          }
+        })
+        .then((body) => {
+          setPosts(body);
+        });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllPosts();
+    dispatch(LOCATION_CHANGE());
+  }, []);
+
+  useEffect(() => {
+    fetchAllPosts();
+    dispatch(LOCATION_CHANGE());
+  }, [navigate]);
+
+  const handleDelete = (postId) => {
+    try {
+      fetch(`${backendURL}/posts`, {
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "http://localhost:8080",
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          } else {
+            throw new Error("Error");
+          }
+        })
+        .then((body) => {
+          setPosts(body);
+        });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <section className="flex min-h-full flex-col justify-center px-10 py-12 lg:px-8">
       <ul role="list" className="divide-y divide-gray-100">
-        {people.map((person) => (
-          <NavLink key={person.email} to={"post/" + person.name}>
-            <li
-              key={person.email}
-              className="flex justify-between gap-x-6 py-5"
-            >
-              <div className="flex min-w-0 gap-x-4">
-                <div className="min-w-0 flex-auto">
-                  <p className="text-xl font-semibold leading-6 text-gray-900">
-                    {person.name}
-                  </p>
-                  <p className="mt-1 truncate text-m leading-5 text-gray-500">
-                    {person.email}
+        {posts &&
+          posts.map((post) => (
+            <NavLink key={post.id} to={"post/" + post.id}>
+              <li key={post.id} className="flex justify-between gap-x-6 py-5">
+                <div className="flex min-w-0 gap-x-4">
+                  <div className="min-w-0 flex-auto">
+                    <p className="text-xl font-semibold leading-6 text-gray-900">
+                      {post.title}
+                    </p>
+                    <p className="mt-1 truncate text-m leading-5 text-gray-500">
+                      {post.author.displayname}
+                    </p>
+                  </div>
+                </div>
+                <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                  <p className="mt-1 text-xs leading-5 text-gray-500">
+                    Last seen{" "}
+                    <time dateTime={post.updated_at}>
+                      {new Date(post.updated_at).toDateString()}
+                    </time>
                   </p>
                 </div>
-              </div>
-              <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                <p className="mt-1 text-xs leading-5 text-gray-500">
-                  Last seen{" "}
-                  <time dateTime={person.lastSeenDateTime}>
-                    {person.lastSeen}
-                  </time>
-                </p>
-              </div>
-            </li>
-          </NavLink>
-        ))}
+              </li>
+            </NavLink>
+          ))}
       </ul>
     </section>
   );
