@@ -1,14 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { registerUser, loginUser } from "./userActions";
+import { registerUser, loginUser, createPost } from "./userActions";
 
 const userToken = localStorage.getItem("userToken")
   ? localStorage.getItem("userToken")
   : null;
 
+const parseJwt = (token) => {
+  let base64Url = token.split(".")[1];
+  let base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  let jsonPayload = decodeURIComponent(
+    window
+      .atob(base64)
+      .split("")
+      .map((c) => {
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join("")
+  );
+
+  return JSON.parse(jsonPayload);
+};
+
 const initialState = {
   loading: false,
   userInfo: null,
   userToken: null,
+  username: null,
   error: null,
   success: false,
 };
@@ -21,6 +38,7 @@ const userSlice = createSlice({
       localStorage.removeItem("userToken");
       state.loading = false;
       state.userInfo = null;
+      state.username = null;
       state.userToken = null;
       state.error = null;
     },
@@ -41,6 +59,7 @@ const userSlice = createSlice({
         state.success = true;
         state.userInfo = payload;
         state.userToken = payload.token;
+        state.username = parseJwt(payload.token).sub;
       })
       .addCase(registerUser.rejected, (state, { payload }) => {
         state.loading = false;
@@ -55,8 +74,21 @@ const userSlice = createSlice({
         state.success = true;
         state.userInfo = payload;
         state.userToken = payload.token;
+        state.username = parseJwt(payload.token).sub;
       })
       .addCase(loginUser.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload;
+      })
+      .addCase(createPost.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createPost.fulfilled, (state) => {
+        state.loading = false;
+        state.success = true;
+      })
+      .addCase(createPost.rejected, (state, { payload }) => {
         state.loading = false;
         state.error = payload;
       });
