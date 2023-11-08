@@ -24,7 +24,7 @@ public class UserConfig {
         return args -> {
             User userA = new User("Bernd", passwordEncoder.encode("Bernd123"), UserRole.USER, "Bernd");
             User userB = new User("JD", passwordEncoder.encode("JD123"), UserRole.USER, "JD");
-            User userC = new User("Admin", passwordEncoder.encode("12345678"), UserRole.ADMIN, "Admin");
+            User userC = new User("Admin", passwordEncoder.encode("123"), UserRole.ADMIN, "Admin");
 
             Post commentA = new Post("This restaurant is amazing!", "Im talking about my place in made up street 3", userA);
             Post commentB = new Post("I love this new Game by Game Company.", "Its the most amazing I've ever seen, can't wait until its released.", userB);
