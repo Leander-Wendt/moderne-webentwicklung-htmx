@@ -1,11 +1,13 @@
 package com.bachelorreact.backend.post;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
+@CrossOrigin
 @RestController
 public class PostController {
 
@@ -23,8 +25,8 @@ public class PostController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/posts")
-    public void addPost(@RequestBody Post post) {
-        postService.addPost(post);
+    public void addPost(@RequestBody Post post, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        postService.addPost(post, token);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/posts/{id}")
