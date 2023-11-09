@@ -13,7 +13,7 @@ export const Posts = () => {
 
   const fetchAllPosts = async () => {
     try {
-      fetch(`${backendURL}/posts`, {
+      fetch(`${backendURL}/public/posts`, {
         method: "get",
         headers: {
           "Content-Type": "application/json",

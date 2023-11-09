@@ -11,7 +11,7 @@ export const Post = () => {
 
   const fetchPost = () => {
     try {
-      fetch(`${backendURL}/posts/${id}`, {
+      fetch(`${backendURL}/public/posts/${id}`, {
         method: "get",
         headers: {},
       })

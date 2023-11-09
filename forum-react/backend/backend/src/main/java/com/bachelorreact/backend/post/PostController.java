@@ -15,12 +15,12 @@ public class PostController {
         this.postService = postService;
     }
 
-    @RequestMapping("/posts")
+    @RequestMapping("/public/posts")
     public List<Post> getAllPosts() {
         return postService.getPosts();
     }
 
-    @RequestMapping("/posts/{id}")
+    @RequestMapping("/public/posts/{id}")
     public Post getPost(@PathVariable UUID id) {
         return postService.getPost(id);
     }
