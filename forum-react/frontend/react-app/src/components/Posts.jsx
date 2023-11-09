@@ -77,7 +77,10 @@ export const Posts = () => {
         {posts &&
           posts.map((post) => (
             <NavLink key={post.id} to={"post/" + post.id}>
-              <li key={post.id} className="flex justify-between gap-x-6 py-5">
+              <li
+                key={post.id}
+                className="p-5 flex justify-between rounded-md gap-x-6 py-5 bg-gray-100 hover:bg-gray-200 mb-2"
+              >
                 <div className="flex min-w-0 gap-x-4">
                   <div className="min-w-0 flex-auto">
                     <p className="text-xl font-semibold leading-6 text-gray-900">
