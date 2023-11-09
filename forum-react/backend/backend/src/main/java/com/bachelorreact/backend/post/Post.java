@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.Builder;
 
 import java.util.Date;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
