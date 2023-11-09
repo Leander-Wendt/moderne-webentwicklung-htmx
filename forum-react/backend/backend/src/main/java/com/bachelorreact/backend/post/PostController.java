@@ -11,8 +11,11 @@ import java.util.UUID;
 @RestController
 public class PostController {
 
-    @Autowired
     private PostService postService;
+
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
 
     @RequestMapping("/posts")
     public List<Post> getAllPosts() {
