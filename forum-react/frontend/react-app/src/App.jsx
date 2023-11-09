@@ -9,7 +9,6 @@ import { ProtectedRoute } from "./routes/ProtectedRoute";
 import { CreatePost } from "./components/CreatePost";
 // TODO:
 // Crud Post
-// Crud Comment (delete comments from project?)
 function App() {
   return (
     <>
