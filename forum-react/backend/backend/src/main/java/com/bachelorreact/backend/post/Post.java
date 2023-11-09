@@ -1,6 +1,5 @@
 package com.bachelorreact.backend.post;
 
-import com.bachelorreact.backend.comment.Comment;
 import com.bachelorreact.backend.user.User;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -24,21 +23,16 @@ public class Post {
     @ManyToOne
     private User author;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private Set<Comment> comments;
-
-
     public Post() {
     }
 
-    public Post(UUID id, String title, String body, Date created_at, Date updated_at, User author, Set<Comment> comments) {
+    public Post(UUID id, String title, String body, Date created_at, Date updated_at, User author) {
         this.id = id;
         this.title = title;
         this.body = body;
         this.created_at = created_at;
         this.updated_at = updated_at;
         this.author = author;
-        this.comments = comments;
     }
 
     public Post(String title, String body, User author) {
@@ -103,13 +97,5 @@ public class Post {
 
     public void setAuthor(User author) {
         this.author = author;
-    }
-
-    public Set<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<Comment> comments) {
-        this.comments = comments;
     }
 }

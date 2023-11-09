@@ -1,6 +1,5 @@
 package com.bachelorreact.backend.user;
 
-import com.bachelorreact.backend.comment.Comment;
 import com.bachelorreact.backend.post.Post;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -29,17 +28,14 @@ public class User implements UserDetails {
     private UserRole userRole;
     @OneToMany(mappedBy = "author")
     private List<Post> posts;
-    @OneToMany(mappedBy = "author")
-    private List<Comment> comments;
 
-    public User(UUID id, String username, String displayname, String password, UserRole userRole, List<Post> posts, List<Comment> comments) {
+    public User(UUID id, String username, String displayname, String password, UserRole userRole, List<Post> posts) {
         this.id = id;
         this.username = username;
         this.displayname = displayname;
         this.password = password;
         this.userRole = userRole;
         this.posts = posts;
-        this.comments = comments;
     }
 
     public User(String username, String password, UserRole userRole, String displayname) {
@@ -49,7 +45,6 @@ public class User implements UserDetails {
         this.userRole = userRole;
         this.displayname = displayname;
         this.posts = new ArrayList<>();
-        this.comments = new ArrayList<>();
     }
 
     public User() {

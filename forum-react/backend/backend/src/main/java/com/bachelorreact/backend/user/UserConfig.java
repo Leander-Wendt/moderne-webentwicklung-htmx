@@ -1,6 +1,5 @@
 package com.bachelorreact.backend.user;
 
-import com.bachelorreact.backend.comment.Comment;
 import com.bachelorreact.backend.post.Post;
 import com.bachelorreact.backend.post.PostRepository;
 import org.springframework.boot.CommandLineRunner;
