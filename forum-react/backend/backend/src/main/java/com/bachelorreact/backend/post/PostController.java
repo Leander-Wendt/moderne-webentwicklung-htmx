@@ -1,13 +1,11 @@
 package com.bachelorreact.backend.post;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
-@CrossOrigin
 @RestController
 public class PostController {
 
