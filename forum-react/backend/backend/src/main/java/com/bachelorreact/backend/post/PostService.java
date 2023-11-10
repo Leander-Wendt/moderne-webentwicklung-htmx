@@ -1,6 +1,7 @@
 package com.bachelorreact.backend.post;
 
 import com.bachelorreact.backend.config.JwtService;
+import com.bachelorreact.backend.exception.ApiNotFoundException;
 import com.bachelorreact.backend.user.User;
 import com.bachelorreact.backend.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -29,7 +30,11 @@ public class PostService {
     }
 
     public Post getPost(UUID id) {
-        return postRepository.getReferenceById(id);
+        var post = postRepository.findById(id);
+        if (post.isEmpty()) {
+            throw new ApiNotFoundException("Post with given ID doesn't exist.");
+        }
+        return post.get();
     }
 
     public void addPost(Post post, String token) {
