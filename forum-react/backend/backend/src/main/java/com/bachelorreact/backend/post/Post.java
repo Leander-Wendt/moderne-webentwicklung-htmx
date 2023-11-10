@@ -4,13 +4,14 @@ import com.bachelorreact.backend.user.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
 @Entity
 @Builder
 @Table
-public class Post {
+public class Post implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -40,14 +41,6 @@ public class Post {
         this.author = author;
         this.created_at = new Date();
         this.updated_at = new Date();
-    }
-
-    public User getUser() {
-        return author;
-    }
-
-    public void setUser(User user) {
-        this.author = author;
     }
 
     public UUID getId() {
