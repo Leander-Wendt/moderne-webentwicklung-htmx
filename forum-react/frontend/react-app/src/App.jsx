@@ -8,6 +8,7 @@ import { PageError } from "./components/PageError";
 import { ProtectedRoute } from "./routes/ProtectedRoute";
 import { CreatePost } from "./components/CreatePost";
 // TODO: Fix Create Post Cors Error, probably issues with req body
+// Register User displays error message on success
 // Crud Post
 function App() {
 	return (
