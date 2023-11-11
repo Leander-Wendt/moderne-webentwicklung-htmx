@@ -33,7 +33,7 @@ export const Posts = () => {
 	useEffect(() => {
 		fetchAllPosts();
 		dispatch(LOCATION_CHANGE());
-	});
+	}, [dispatch]);
 
 	useEffect(() => {
 		fetchAllPosts();
