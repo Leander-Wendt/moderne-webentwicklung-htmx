@@ -26,8 +26,8 @@ public class PostController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/posts")
-    public void addPost(@RequestBody Post post, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        postService.addPost(post, token);
+    public Post addPost(@RequestBody Post post, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return postService.addPost(post, token);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/posts/{id}")

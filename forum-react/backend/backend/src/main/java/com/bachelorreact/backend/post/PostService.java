@@ -37,10 +37,10 @@ public class PostService {
         return post.get();
     }
 
-    public void addPost(Post post, String token) {
+    public Post addPost(Post post, String token) {
         User user = userRepository.findByUsername(jwtService.extractUsername(token.split(" ")[1])).get();
         post.setAuthor(user);
-        postRepository.save(post);
+        return postRepository.save(post);
     }
 
     public void updatePost(UUID id, Post post) {
