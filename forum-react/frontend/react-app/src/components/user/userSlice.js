@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { registerUser, loginUser, createPost } from "./userActions";
+import { registerUser, loginUser } from "./userActions";
 
 const parseJwt = (token) => {
 	let base64Url = token.split(".")[1];
@@ -19,11 +19,11 @@ const parseJwt = (token) => {
 
 const initialState = {
 	loading: false,
+	error: null,
+	success: false,
 	userInfo: null,
 	userToken: null,
 	username: null,
-	error: null,
-	success: false,
 };
 
 const userSlice = createSlice({
@@ -73,18 +73,6 @@ const userSlice = createSlice({
 				state.username = parseJwt(payload.token).sub;
 			})
 			.addCase(loginUser.rejected, (state, { payload }) => {
-				state.loading = false;
-				state.error = payload;
-			})
-			.addCase(createPost.pending, (state) => {
-				state.loading = true;
-				state.error = null;
-			})
-			.addCase(createPost.fulfilled, (state) => {
-				state.loading = false;
-				state.success = true;
-			})
-			.addCase(createPost.rejected, (state, { payload }) => {
 				state.loading = false;
 				state.error = payload;
 			});
