@@ -24,7 +24,6 @@ export const CreatePost = () => {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		inputs.userToken = userToken;
-		console.log(inputs);
 		dispatch(createPost(inputs));
 		navigate("/");
 	};
