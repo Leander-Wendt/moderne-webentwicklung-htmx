@@ -1,48 +1,23 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
+import { useEffect } from "react";
 import { LOCATION_CHANGE } from "./user/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getPosts } from "./post/postActions";
 
 export const Posts = () => {
-	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	const [posts, setPosts] = useState();
-	const backendURL = "http://127.0.0.1:8080";
-
-	const fetchAllPosts = async () => {
-		fetch(`${backendURL}/public/posts`, {
-			method: "get",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		})
-			.then((res) => {
-				if (res.ok) {
-					return res.json();
-				} else {
-					throw new Error("Error");
-				}
-			})
-			.then((body) => {
-				setPosts(body);
-			})
-			.catch((err) => console.error(err));
-	};
-
 	useEffect(() => {
-		fetchAllPosts();
+		console.log("useeffect");
+		dispatch(getPosts());
 		dispatch(LOCATION_CHANGE());
 	}, [dispatch]);
 
-	useEffect(() => {
-		fetchAllPosts();
-		dispatch(LOCATION_CHANGE());
-	}, [navigate, dispatch]);
+	const { posts } = useSelector((state) => state.post);
 
 	return (
 		<section className="flex min-h-full flex-col justify-center px-10 py-12 lg:px-8">
-			<ul role="list" className="divide-y divide-gray-100">
+			<ul className="divide-y divide-gray-100">
 				{posts?.map((post) => (
 					<NavLink key={post.id} to={"post/" + post.id}>
 						<li
