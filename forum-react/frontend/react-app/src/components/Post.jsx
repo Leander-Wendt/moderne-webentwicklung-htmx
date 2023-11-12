@@ -19,7 +19,6 @@ export const Post = () => {
 				if (res.ok) {
 					return res.json();
 				} else {
-					console.log(res);
 					throw new Error(res.statusText);
 				}
 			})
