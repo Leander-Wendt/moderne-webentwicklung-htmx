@@ -81,9 +81,8 @@ export const createPost = createAsyncThunk(
 				}),
 			})
 				.then((res) => {
-					console.log(res)
 					if (!res.ok){
-						throw new Error("Something went wrong")
+						throw new Error(res.text())
 					}
 				})
 		} catch (error) {
