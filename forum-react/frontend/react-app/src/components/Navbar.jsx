@@ -3,6 +3,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "./user/userSlice";
+import { resetPostState } from "./post/postSlice";
 
 function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
@@ -19,6 +20,7 @@ export const Navbar = () => {
 	const { userToken } = useSelector((state) => state.user);
 
 	const handleLogout = () => {
+		dispatch(resetPostState());
 		dispatch(logout());
 	};
 	// Source: https://tailwindui.com/components/application-ui/application-shells/stacked
