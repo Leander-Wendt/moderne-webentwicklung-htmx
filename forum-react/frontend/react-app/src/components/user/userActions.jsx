@@ -67,24 +67,25 @@ export const createPost = createAsyncThunk(
 	"post/create",
 	async ({ title, body, userToken }, { rejectWithValue }) => {
 		try {
-			let data = await fetch(`${backendURL}/posts`, {
+			await fetch(`${backendURL}/posts`, {
 				method: "post",
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${userToken}`,
+					"Authorization": `Bearer ${userToken}`
 				},
 				body: JSON.stringify({
-					title: title,
-					body: body,
-					created_at: Date.now(),
-					updated_at: Date.now(),
+					"title": title,
+					"body": body,
+					"created_at": Date.now(),
+					"updated_at": Date.now(),
 				}),
 			})
-				.then((res) => res.json())
-				.then((body) => {
-					return body;
-				});
-			return data;
+				.then((res) => {
+					console.log(res)
+					if (!res.ok){
+						throw new Error("Something went wrong")
+					}
+				})
 		} catch (error) {
 			if (error.response?.data.message) {
 				return rejectWithValue(error.response.data.message);
