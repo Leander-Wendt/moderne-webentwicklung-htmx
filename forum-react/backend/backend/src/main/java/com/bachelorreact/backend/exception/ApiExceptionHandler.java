@@ -33,4 +33,12 @@ public class ApiExceptionHandler {
         );
         return new ResponseEntity<>(apiException, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(value = {ApiForbiddenException.class})
+    public ResponseEntity<Object> handleApiForbiddenException(ApiForbiddenException exception) {
+        ApiException apiException = new ApiException(
+                exception.getMessage(), exception, HttpStatus.FORBIDDEN, ZonedDateTime.now(ZoneId.of("UTC+2"))
+        );
+        return new ResponseEntity<>(apiException, HttpStatus.FORBIDDEN);
+    }
 }
