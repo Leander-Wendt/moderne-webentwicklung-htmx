@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createPost, getPosts } from "./postActions";
+import { createPost, getPosts, editPost } from "./postActions";
 
 const initialState = {
   loading: false,
@@ -44,6 +44,18 @@ const postSlice = createSlice({
         state.posts = payload;
       })
       .addCase(getPosts.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload;
+      })
+      .addCase(editPost.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(editPost.fulfilled, (state) => {
+        state.loading = false;
+        state.success = true;
+      })
+      .addCase(editPost.rejected, (state, { payload }) => {
         state.loading = false;
         state.error = payload;
       });
