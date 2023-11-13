@@ -1,10 +1,12 @@
 package com.bachelorreact.backend.post;
 
 import com.bachelorreact.backend.config.JwtService;
+import com.bachelorreact.backend.exception.ApiForbiddenException;
 import com.bachelorreact.backend.exception.ApiNotFoundException;
 import com.bachelorreact.backend.user.User;
 import com.bachelorreact.backend.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,11 +45,23 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public void updatePost(UUID id, Post post) {
-        if (postRepository.getReferenceById(id) == null) {
+    public Post updatePost(UUID id, Post post, String token) {
+        System.out.println(id);
+        System.out.println(post);
+        System.out.println(token);
+        User user = userRepository.findByUsername(jwtService.extractUsername(token.split(" ")[1])).get();
+        Post localPost = postRepository.getReferenceById(id);
+
+        if (user.getUsername() != localPost.getAuthor().getUsername()) {
+            throw new ApiForbiddenException("You are not allowed to change the state of that resource.");
+        }
+        if (localPost == null) {
             throw new EntityNotFoundException();
         }
-        postRepository.save(post);
+        localPost.setTitle(post.getTitle());
+        localPost.setBody(post.getBody());
+        localPost.setUpdated_at(post.getUpdated_at());
+        return postRepository.save(localPost);
     }
 
     public void deletePost(UUID id) {

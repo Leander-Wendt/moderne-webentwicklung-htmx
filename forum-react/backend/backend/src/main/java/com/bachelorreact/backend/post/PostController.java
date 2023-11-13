@@ -31,8 +31,8 @@ public class PostController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/posts/{id}")
-    public void updatePost(@RequestBody Post post, @PathVariable UUID id) {
-        postService.updatePost(id, post);
+    public Post updatePost(@RequestBody Post post, @PathVariable UUID id, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return postService.updatePost(id, post, token);
     }
 
     @RequestMapping(value = "/posts/{id}", method = RequestMethod.DELETE)
