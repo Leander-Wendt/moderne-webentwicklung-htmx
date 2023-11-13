@@ -30,7 +30,7 @@ export const Posts = () => {
                     {post.title}
                   </p>
                   <p className="mt-1 truncate text-m leading-5 text-gray-500">
-                    {post.author.displayname}
+                    {post.author?.displayname || ""}
                   </p>
                 </div>
               </div>
