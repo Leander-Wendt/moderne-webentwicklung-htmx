@@ -36,7 +36,7 @@ export const Posts = () => {
               </div>
               <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
                 <p className="mt-1 text-xs leading-5 text-gray-500">
-                  Last seen{" "}
+                  Posted on{" "}
                   <time dateTime={post.updated_at}>
                     {new Date(post.updated_at).toDateString()}
                   </time>
