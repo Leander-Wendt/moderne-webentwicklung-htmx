@@ -111,13 +111,6 @@
             <version>1.6.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.webjars.npm/tailwindcss -->
-        <dependency>
-            <groupId>org.webjars.npm</groupId>
-            <artifactId>tailwindcss</artifactId>
-            <version>3.3.5</version>
-        </dependency>
-
     </dependencies>
 
     <build>
