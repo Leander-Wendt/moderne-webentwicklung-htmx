@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { createPost } from "./post/postActions";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,6 +30,14 @@ export const CreatePost = () => {
 	return (
 		<div className="relative mt-20 mx-10 max-w-container px-4 sm:px-6 lg:px-8">
 			<div className="flex flex-col">
+				<div className="sm:mx-auto sm:w-full sm:max-w-sm">
+					{/*<NavLink to="/" className="absolute left-0 ">
+						Back to Home
+					</NavLink>*/}
+					<h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+						Create Post
+					</h2>
+				</div>
 				<div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
 					<form
 						onSubmit={handleSubmit}
@@ -53,7 +61,7 @@ export const CreatePost = () => {
 									value={inputs.title || ""}
 									required
 									onChange={handleChange}
-									className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+									className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 								/>
 							</div>
 						</div>
@@ -69,13 +77,12 @@ export const CreatePost = () => {
 								<textarea
 									id="body"
 									name="body"
-									className="block w-full rounded-md border-0 py-1.5 text-xl text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+									className="px-3 block w-full rounded-md border-0 py-1.5 text-xl text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 									value={inputs.body || ""}
 									onChange={handleChange}
 								/>
 							</div>
 							<div className="mt-2">
-								<NavLink to="/">Cancel</NavLink>
 								<input
 									type="submit"
 									value="Post"
