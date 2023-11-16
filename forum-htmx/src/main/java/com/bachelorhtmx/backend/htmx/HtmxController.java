@@ -10,4 +10,14 @@ public class HtmxController {
     public String index() {
         return "index";
     }
+
+    @GetMapping("/login")
+    public String login() {
+        return "Login";
+    }
+
+    @GetMapping("/register")
+    public String register() {
+        return "Register";
+    }
 }
