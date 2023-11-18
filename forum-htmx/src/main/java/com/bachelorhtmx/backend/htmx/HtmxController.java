@@ -1,9 +1,13 @@
 package com.bachelorhtmx.backend.htmx;
 
 import com.bachelorhtmx.backend.post.PostService;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @Controller
 public class HtmxController {
@@ -19,7 +23,6 @@ public class HtmxController {
         model.addAttribute("posts", postService.getPosts());
         return "index.html";
     }
-
     @GetMapping("/login")
     public String login() {
         return "Login";
@@ -28,5 +31,11 @@ public class HtmxController {
     @GetMapping("/register")
     public String register() {
         return "Register";
+    }
+
+    @GetMapping(value = "/favicon.ico")
+    public @ResponseBody byte[] getImage() throws IOException {
+        Resource resource = new ClassPathResource("favicon.ico");
+        return resource.getContentAsByteArray();
     }
 }
