@@ -33,6 +33,11 @@ public class HtmxController {
         return "Register";
     }
 
+    @GetMapping("/post/new")
+    public String createPost() {
+        return "CreatePost";
+    }
+
     @GetMapping(value = "/favicon.ico")
     public @ResponseBody byte[] getImage() throws IOException {
         Resource resource = new ClassPathResource("favicon.ico");
