@@ -91,7 +91,10 @@
                 >Login</a
                 >
                 <a
-                        href="/register"
+                        hx-target="#main"
+                        hx-swap="innerHtml"
+                        hx-get="/register"
+                        href=""
                         class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                 >Register</a
                 >
@@ -101,6 +104,9 @@
                 >Logout</a
                 >
                 <a
+                        hx-target="#main"
+                        hx-swap="innerHtml"
+                        hx-get="/post/new"
                         href="/post/new"
                         class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                 >Create Post</a>
