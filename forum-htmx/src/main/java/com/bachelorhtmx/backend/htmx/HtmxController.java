@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.UUID;
 
 @Controller
@@ -42,7 +44,9 @@ public class HtmxController {
 
     @RequestMapping("/post/{id}")
     public String getPost(@PathVariable UUID id, Model model) {
-        model.addAttribute("post", postService.getPost(id));
+        Post post = postService.getPost(id);
+        model.addAttribute("post", post);
+        model.addAttribute("subtitle", String.format(post.getAuthor().getDisplayname() + " posted on " + new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY).format(post.getUpdated_at())));
         return "Post";
     }
 
