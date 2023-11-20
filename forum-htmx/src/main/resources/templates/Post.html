@@ -6,6 +6,9 @@
             <div class="flex flex-row items-center gap-4">
                 <button
                         class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-white"
+                        hx-target="#main"
+                        hx-swap="innerHtml"
+                        th:attr="hx-get='/post/' + ${post.id} + '/edit'"
                 >
                     Edit
                 </button>
