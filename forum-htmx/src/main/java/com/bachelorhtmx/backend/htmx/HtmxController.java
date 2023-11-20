@@ -11,11 +11,16 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
 public class HtmxController {
 
+    // TODO:
+    // Form Input Validation
+    // Auth Flow
+    // Dynamic nav
     private final PostService postService;
 
     public HtmxController(PostService postService) {
@@ -38,7 +43,8 @@ public class HtmxController {
     }
 
     @GetMapping("/post/new")
-    public String createPost() {
+    public String createPost(Model model) {
+        model.addAllAttributes(Map.of("formTitle", "Create Post", "title", "", "body", "", "buttonValue", "Post"));
         return "CreatePost";
     }
 
@@ -60,5 +66,12 @@ public class HtmxController {
     public String getPosts(Model model) {
         model.addAttribute("posts", postService.getPosts());
         return "fragments/Posts";
+    }
+
+    @RequestMapping("/post/{id}/edit")
+    public String editPost(@PathVariable UUID id, Model model) {
+        Post post = postService.getPost(id);
+        model.addAllAttributes(Map.of("formTitle", "Edit Post", "title", post.getTitle(), "body", post.getBody(), "buttonValue", "Update"));
+        return "CreatePost";
     }
 }
