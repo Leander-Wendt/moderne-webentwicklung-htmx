@@ -5,12 +5,12 @@
             </h1>
             <div class="flex flex-row items-center gap-4">
                 <button
-                        class="px-4 py-2 rounded-xl bg-zinc-500 hover:bg-zinc-400 text-white"
+                        class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-white"
                 >
                     Edit
                 </button>
                 <button
-                        class="px-4 py-2 rounded-xl bg-zinc-500 hover:bg-zinc-400 text-white"
+                        class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-white"
                 >
                     Delete
                 </button>
@@ -18,14 +18,12 @@
         </div>
 
         <h2 class="mt-1 text-s leading-6 text-gray-400">
-            {post.author.displayname} posted at{" "}
-            {new Date(post.updated_at).toDateString()}
+            post author displayname post at Date
         </h2>
-        <p class="mt-10 text-xl leading-6 text-gray-600"th:text="${post.text}"></p>
+        <p class="mt-10 text-xl leading-6 text-gray-600" th:text="${post.body}"></p>
 
         <div class="space-y-12">
             <div class="border-b border-gray-900/10 pb-12"></div>
         </div>
     </div>
 </div>
-<p>Error</p>
