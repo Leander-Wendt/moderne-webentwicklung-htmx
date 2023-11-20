@@ -55,4 +55,10 @@ public class HtmxController {
         Resource resource = new ClassPathResource("favicon.ico");
         return resource.getContentAsByteArray();
     }
+
+    @GetMapping("/posts")
+    public String getPosts(Model model) {
+        model.addAttribute("posts", postService.getPosts());
+        return "fragments/Posts";
+    }
 }
