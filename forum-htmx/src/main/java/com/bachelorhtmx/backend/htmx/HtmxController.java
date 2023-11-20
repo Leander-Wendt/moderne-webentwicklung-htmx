@@ -45,7 +45,7 @@ public class HtmxController {
     @GetMapping("/post/new")
     public String createPost(Model model) {
         model.addAllAttributes(Map.of("formTitle", "Create Post", "title", "", "body", "", "buttonValue", "Post"));
-        return "CreatePost";
+        return "PostForm";
     }
 
     @RequestMapping("/post/{id}")
@@ -72,6 +72,6 @@ public class HtmxController {
     public String editPost(@PathVariable UUID id, Model model) {
         Post post = postService.getPost(id);
         model.addAllAttributes(Map.of("formTitle", "Edit Post", "title", post.getTitle(), "body", post.getBody(), "buttonValue", "Update"));
-        return "CreatePost";
+        return "PostForm";
     }
 }
