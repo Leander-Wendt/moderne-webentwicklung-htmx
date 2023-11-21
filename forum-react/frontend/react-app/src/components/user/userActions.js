@@ -17,8 +17,10 @@ export const registerUser = createAsyncThunk(
         .then((res) => {
           if (res.status === 409) {
             throw new Error("Username is already taken.");
+          } else if (res.ok) {
+            return res.json();
           }
-          res.json();
+          throw new Error("An error occured.");
         })
         .then((body) => {
           localStorage.setItem("userToken", body.token);
