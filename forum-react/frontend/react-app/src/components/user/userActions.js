@@ -47,7 +47,13 @@ export const loginUser = createAsyncThunk(
         },
         body: JSON.stringify({ username, password }),
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (res.ok) {
+            res.json();
+          } else {
+            throw new Error("Request failed.");
+          }
+        })
         .then((body) => {
           localStorage.setItem("userToken", body.token);
           return body;
