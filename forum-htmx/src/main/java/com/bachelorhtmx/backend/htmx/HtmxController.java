@@ -21,6 +21,7 @@ public class HtmxController {
     // Form Input Validation
     // Auth Flow
     // Dynamic nav
+    // Input Validation in React and Thymeleaf, especially no empty title for create/update Post
     private final PostService postService;
 
     public HtmxController(PostService postService) {
