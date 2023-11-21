@@ -48,4 +48,7 @@ public class UserService implements UserDetailsService {
     }
 
 
+    public User getUserByUsername(String username) {
+        return userRepository.getUserByUsername(username);
+    }
 }
