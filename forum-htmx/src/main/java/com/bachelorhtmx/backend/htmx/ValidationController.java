@@ -1,21 +1,17 @@
 package com.bachelorhtmx.backend.htmx;
 
-import com.bachelorhtmx.backend.auth.RegisterRequest;
-import com.bachelorhtmx.backend.post.Post;
 import com.bachelorhtmx.backend.post.PostService;
 import com.bachelorhtmx.backend.user.User;
 import com.bachelorhtmx.backend.user.UserService;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 import java.util.Map;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/validation")
@@ -28,44 +24,36 @@ public class ValidationController {
         this.userService = userService;
     }
 
-    @PostMapping("/register/username")
-    public String validateUsername(Model model, @RequestBody RegisterRequest request) {
-        User user = userService.getUserByUsername(request.getUsername());
-        System.out.println(request);
-        System.out.println(user);
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.TEXT_HTML_VALUE)
+    public String validateUsername(Model model, @RequestParam Map<String, String> body) {
+        String username = body.get("username");
+        String password = body.get("password");
+        User user = userService.getUserByUsername(username);
+        Boolean disabled = username == null || password == null ? true : false;
 
-        if (request.getUsername().length() < 2) {
-            model.addAttribute("message", "Username must be between 2 and 24 characters long.");
+        model.addAllAttributes(Map.of("usernameValue", username, "displaynameValue", body.get("displayname"), "passwordValue", password));
+
+        if (username.length() < 2 || username.length() > 24) {
+            System.out.println("if 1");
+            model.addAttribute("usernameMessage", "Username must be between 2 and 24 characters long.");
+            disabled = true;
         } else if (user != null) {
-            model.addAttribute("message", "Username is already taken.");
-        } else {
-            model.addAttribute("message", "");
+            System.out.println("if 2");
+            model.addAttribute("usernameMessage", "Username is already taken.");
+            disabled = true;
         }
-        return "validation/UsernameInput";
+
+        if (password.length() < 8 || password.length() > 40) {
+            model.addAttribute("passwordMessage", "Password must be between 8 and 40 characters long.");
+            disabled = true;
+        }
+
+        model.addAttribute("disabled", disabled);
+        return "Register";
     }
 
     @GetMapping("/login")
     public String login() {
         return "Login";
-    }
-
-    @RequestMapping("/post/{id}")
-    public String getPost(@PathVariable UUID id, Model model) {
-        Post post = postService.getPost(id);
-        model.addAttribute("post", post);
-        model.addAttribute("subtitle", String.format(post.getAuthor().getDisplayname() + " posted on " + new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY).format(post.getUpdated_at())));
-        return "Post";
-    }
-
-    @GetMapping(value = "/favicon.ico")
-    public @ResponseBody byte[] getImage() throws IOException {
-        Resource resource = new ClassPathResource("favicon.ico");
-        return resource.getContentAsByteArray();
-    }
-
-    @GetMapping("/posts")
-    public String getPosts(Model model) {
-        model.addAttribute("posts", postService.getPosts());
-        return "fragments/Posts";
     }
 }
