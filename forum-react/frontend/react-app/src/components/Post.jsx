@@ -65,13 +65,13 @@ export const Post = () => {
                 <div className="flex flex-row items-center gap-4">
                   <button
                     onClick={handleEdit}
-                    className="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-white"
+                    className="px-4 py-2 rounded-xl bg-gray-700 hover:bg-gray-600 text-white"
                   >
                     Edit
                   </button>
                   <button
                     onClick={handleDelete}
-                    className="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-white"
+                    className="px-4 py-2 rounded-xl bg-gray-700 hover:bg-gray-600 text-white"
                   >
                     Delete
                   </button>
