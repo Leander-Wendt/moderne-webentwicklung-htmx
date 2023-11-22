@@ -1,4 +1,7 @@
-<section class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+<section
+        hx-swap="outerHTML"
+        hx-target="this"
+        class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
         <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Register
@@ -10,7 +13,8 @@
                 action="#"
                 method="POST"
         >
-            <div>
+            <div
+                    >
                 <label
                         htmlFor="username"
                         class="block text-sm font-medium leading-6 text-gray-900"
@@ -19,16 +23,15 @@
                 </label>
                 <div class="mt-2">
                     <input
+                            th:value="${usernameValue}"
+                            hx-post="/validation/register"
                             type="text"
                             name="username"
                             id="username"
                             autoComplete="off"
                             required
-                            hx-post="/validation/register/username"
-                            hx-swap="outerHtml"
-                            hx-target="this"
                             class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-                    <p th:text="${message}" style="color:red;textAlign:center"/>
+                    <p th:text="${usernameMessage}" style="color:red;textAlign:center"/>
                 </div>
             </div>
 
@@ -43,6 +46,7 @@
                 </div>
                 <div class="mt-2">
                     <input
+                            th:value="${displaynameValue}"
                             type="text"
                             name="displayname"
                             autoComplete="off"
@@ -57,14 +61,10 @@
                 >
                     Password
                 </label>
-                <p
-                        id="passwordHint"
-                        style="color:black;textAlign:center"
-                >
-                    8 to 40 characters.
-                </p>
                 <div class="mt-2">
                     <input
+                            th:value="${passwordValue}"
+                            hx-post="/validation/register"
                             type="password"
                             name="password"
                             autoComplete="off"
@@ -73,12 +73,16 @@
                     ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600
                     sm:text-sm sm:leading-6"
                     />
+                    <p th:text="${passwordMessage}" style="color:red;textAlign:center"/>
                 </div>
                 <div class="mt-2">
                     <input
                             type="submit"
                             value="Register"
-                            class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            th:disabled="${disabled}"
+                            hx-post="/posts"
+                            hx-trigger="click"
+                            class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-slate-300"
                     />
                 </div>
             </div>
