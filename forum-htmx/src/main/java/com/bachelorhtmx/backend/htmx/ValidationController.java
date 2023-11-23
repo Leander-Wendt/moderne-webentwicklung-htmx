@@ -29,21 +29,19 @@ public class ValidationController {
         String username = body.get("username");
         String password = body.get("password");
         User user = userService.getUserByUsername(username);
-        Boolean disabled = username == null || password == null ? true : false;
+        Boolean disabled = username == null || password == null;
 
         model.addAllAttributes(Map.of("usernameValue", username, "displaynameValue", body.get("displayname"), "passwordValue", password));
 
-        if (username.length() < 2 || username.length() > 24) {
-            System.out.println("if 1");
+        if (username != null && (username.length() < 2 || username.length() > 24)) {
             model.addAttribute("usernameMessage", "Username must be between 2 and 24 characters long.");
             disabled = true;
         } else if (user != null) {
-            System.out.println("if 2");
             model.addAttribute("usernameMessage", "Username is already taken.");
             disabled = true;
         }
 
-        if (password.length() < 8 || password.length() > 40) {
+        if (password.length() > 0 && (password.length() < 8 || password.length() > 40)) {
             model.addAttribute("passwordMessage", "Password must be between 8 and 40 characters long.");
             disabled = true;
         }
