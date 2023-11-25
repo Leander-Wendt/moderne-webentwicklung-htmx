@@ -3,14 +3,16 @@ package com.bachelorhtmx.backend.htmx;
 import com.bachelorhtmx.backend.post.PostService;
 import com.bachelorhtmx.backend.user.User;
 import com.bachelorhtmx.backend.user.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.Duration;
 import java.util.Map;
 
 @Controller
@@ -50,8 +52,17 @@ public class ValidationController {
         return "Register";
     }
 
-    @GetMapping("/login")
-    public String login() {
+    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.TEXT_HTML_VALUE)
+    public String validateLogin(Model model, @RequestParam Map<String, String> body, HttpServletResponse response) {
+        String username = body.get("username");
+        String password = body.get("password");
+
+        Cookie cookie = new Cookie("username", "Bernd");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setMaxAge(30 * 24 * 60 * 60); // 30 Days
+        response.addCookie(cookie);
+
         return "Login";
     }
 }
