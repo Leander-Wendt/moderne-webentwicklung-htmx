@@ -5,6 +5,7 @@ import com.bachelorhtmx.backend.exception.ApiConflictException;
 import com.bachelorhtmx.backend.user.User;
 import com.bachelorhtmx.backend.user.UserRepository;
 import com.bachelorhtmx.backend.user.UserRole;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -50,7 +51,7 @@ public class AuthenticationService {
                 )
         );
         var user = repository.findByUsername(request.getUsername())
-                .orElseThrow();
+                .orElseThrow(EntityNotFoundException::new);
         var jwt = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwt)
