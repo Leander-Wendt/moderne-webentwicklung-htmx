@@ -1,5 +1,7 @@
 package com.bachelorhtmx.backend.htmx;
 
+import com.bachelorhtmx.backend.auth.AuthenticationRequest;
+import com.bachelorhtmx.backend.auth.AuthenticationService;
 import com.bachelorhtmx.backend.post.PostService;
 import com.bachelorhtmx.backend.user.User;
 import com.bachelorhtmx.backend.user.UserService;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.Duration;
 import java.util.Map;
 
 @Controller
@@ -20,10 +21,12 @@ import java.util.Map;
 public class ValidationController {
     private final PostService postService;
     private final UserService userService;
+    private final AuthenticationService authenticationService;
 
-    public ValidationController(PostService postService, UserService userService) {
+    public ValidationController(PostService postService, UserService userService, AuthenticationService authenticationService) {
         this.postService = postService;
         this.userService = userService;
+        this.authenticationService = authenticationService;
     }
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.TEXT_HTML_VALUE)
@@ -57,12 +60,20 @@ public class ValidationController {
         String username = body.get("username");
         String password = body.get("password");
 
-        Cookie cookie = new Cookie("username", "Bernd");
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setMaxAge(30 * 24 * 60 * 60); // 30 Days
-        response.addCookie(cookie);
+        String token = authenticationService.authenticate(username, password);
 
-        return "Login";
+        if (token != null) {
+            Cookie cookie = new Cookie("jwt", token);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(true);
+            cookie.setMaxAge(30 * 24 * 60 * 60); // 30 Days
+            response.addCookie(cookie);
+
+            model.addAttribute("posts", postService.getPosts());
+            return "index";
+        } else {
+            model.addAttribute("errorMessage", "Credentials didn't match.");
+            return "Login";
+        }
     }
 }
