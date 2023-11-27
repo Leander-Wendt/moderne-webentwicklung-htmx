@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AuthenticationService {
     private final UserRepository repository;
@@ -56,5 +58,21 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .token(jwt)
                 .build();
+    }
+
+    public String authenticate(String username, String password) {
+        Optional<User> user = repository.findByUsername(username);
+
+        if (user.isEmpty()) {
+            return null;
+        }
+
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        username,
+                        password
+                )
+        );
+        return jwtService.generateToken(user.get());
     }
 }
