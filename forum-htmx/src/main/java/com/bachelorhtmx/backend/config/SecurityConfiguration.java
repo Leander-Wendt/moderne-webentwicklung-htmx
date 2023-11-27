@@ -27,12 +27,13 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
-                .formLogin(fl -> fl.loginPage("/login").permitAll())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/favicon.ico").permitAll()
+                        .requestMatchers("/validation/**").permitAll()
+                        .requestMatchers("/htmx/**").permitAll()
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
