@@ -24,7 +24,8 @@ public class HtmxController {
     // Form Input Validation
     // Auth Flow
     // Dynamic nav
-    // Input Validation in React and Thymeleaf, especially no empty title for create/update Post
+    // https://stackoverflow.com/questions/19281821/spring-mvc-when-to-use-cookievalue
+    // https://attacomsian.com/blog/cookies-spring-boot
     private final PostService postService;
 
     public HtmxController(PostService postService) {
