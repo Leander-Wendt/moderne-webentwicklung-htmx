@@ -34,7 +34,7 @@ public class ValidationController {
         String username = body.get("username");
         String password = body.get("password");
         User user = userService.getUserByUsername(username);
-        Boolean disabled = username == null || password == null;
+        Boolean disabled = username == null || password == null || username == "" || password == "";
 
         model.addAllAttributes(Map.of("usernameValue", username, "displaynameValue", body.get("displayname"), "passwordValue", password));
 
