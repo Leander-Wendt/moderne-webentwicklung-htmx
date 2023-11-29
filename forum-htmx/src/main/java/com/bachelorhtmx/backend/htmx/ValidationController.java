@@ -30,13 +30,14 @@ public class ValidationController {
     }
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.TEXT_HTML_VALUE)
-    public String validateUsername(Model model, @RequestParam Map<String, String> body) {
+    public String validateRegister(Model model, @RequestParam Map<String, String> body) {
         String username = body.get("username");
         String password = body.get("password");
         User user = userService.getUserByUsername(username);
+
         Boolean disabled = username == null || password == null || username == "" || password == "";
 
-        model.addAllAttributes(Map.of("usernameValue", username, "displaynameValue", body.get("displayname"), "passwordValue", password));
+        model.addAllAttributes(Map.of("usernameValue", username, "displaynameValue", body.get("displayname"), "passwordValue", password, "loggedIn", false));
 
         if (username != null && (username.length() < 2 || username.length() > 24)) {
             model.addAttribute("usernameMessage", "Username must be between 2 and 24 characters long.");
@@ -66,13 +67,14 @@ public class ValidationController {
             Cookie cookie = new Cookie("jwt", token);
             cookie.setHttpOnly(true);
             cookie.setSecure(true);
+            cookie.setPath("/");
             cookie.setMaxAge(30 * 24 * 60 * 60); // 30 Days
             response.addCookie(cookie);
 
-            model.addAttribute("posts", postService.getPosts());
+            model.addAllAttributes(Map.of("posts", postService.getPosts(), "loggedIn", true));
             return "index";
         } else {
-            model.addAttribute("errorMessage", "Credentials didn't match.");
+            model.addAllAttributes(Map.of("errorMessage", "Credentials didn't match.", "loggedIn", false));
             return "Login";
         }
     }
