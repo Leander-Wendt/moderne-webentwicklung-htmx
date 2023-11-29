@@ -45,6 +45,23 @@ public class AuthenticationService {
                 .build();
     }
 
+    public String register(String username, String displayname, String password) {
+        if (repository.getUserByUsername(username) != null){
+            throw new ApiConflictException("Username already taken");
+        }
+
+        displayname = displayname.isEmpty() ? username : displayname;
+
+        var user = User.builder()
+                .username(username)
+                .displayname(displayname)
+                .password(passwordEncoder.encode(password))
+                .userRole(UserRole.USER)
+                .build();
+        repository.save(user);
+        return jwtService.generateToken(user);
+    }
+
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
