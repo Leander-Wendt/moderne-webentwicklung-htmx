@@ -30,11 +30,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/favicon.ico").permitAll()
                         .requestMatchers("/validation/**").permitAll()
                         .requestMatchers("/htmx/**").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
