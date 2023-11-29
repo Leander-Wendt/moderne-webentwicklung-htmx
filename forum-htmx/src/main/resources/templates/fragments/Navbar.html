@@ -45,9 +45,9 @@
             <div class="hidden sm:ml-6 sm:block">
                 <div class="flex space-x-4">
                     <a
-                            hx-target="#main"
+                            hx-target="#body"
                             hx-swap="innerHtml"
-                            hx-get="/posts"
+                            hx-get="/"
                             href=""
                             class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                     >
@@ -64,7 +64,7 @@
                     th:if="${!loggedIn}"
                     hx-target="#body"
                     hx-swap="innerHtml"
-                    hx-get="/login"
+                    hx-get="/htmx/login"
                     href=""
                     class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
             >Login</a
@@ -73,23 +73,25 @@
                     th:if="${!loggedIn}"
                     hx-target="#body"
                     hx-swap="innerHtml"
-                    hx-get="/register"
+                    hx-get="/htmx/register"
                     href=""
                     class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
             >Register</a
             >
-            <a
+            <button
                     th:if="${loggedIn}"
-                    href="/"
+                    hx-get="/htmx/logout"
+                    hx-swap="innerHTML"
+                    hx-target="#body"
                     class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-            >Logout</a
-            >
+            >Logout
+            </button>
             <a
                     th:if="${loggedIn}"
                     hx-target="#main"
                     hx-swap="innerHtml"
-                    hx-get="/post/new"
-                    href="/post/new"
+                    hx-get="/htmx/post/new"
+                    href=""
                     class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
             >Create Post</a>
         </div>

@@ -8,7 +8,7 @@
                         class="px-4 py-2 rounded-xl bg-gray-700 hover:bg-gray-600 text-white"
                         hx-target="#main"
                         hx-swap="innerHtml"
-                        th:attr="hx-get='/post/' + ${post.id} + '/edit'"
+                        th:attr="hx-get='/htmx/post/' + ${post.id} + '/edit'"
                 >
                     Edit
                 </button>
