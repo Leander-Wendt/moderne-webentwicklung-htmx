@@ -2,14 +2,13 @@ package com.bachelorhtmx.backend.htmx;
 
 import com.bachelorhtmx.backend.post.Post;
 import com.bachelorhtmx.backend.post.PostService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -33,33 +32,9 @@ public class HtmxController {
     }
 
     @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("posts", postService.getPosts());
+    public String index(Model model, @CookieValue(value = "jwt", required = false) String jwtCookie) {
+        model.addAllAttributes(Map.of("posts", postService.getPosts(), "loggedIn", jwtCookie != null));
         return "index.html";
-    }
-    @GetMapping("/login")
-    public String login() {
-        return "Login";
-    }
-
-    @GetMapping("/register")
-    public String register(Model model) {
-        model.addAttribute("disabled", true);
-        return "Register";
-    }
-
-    @GetMapping("/post/new")
-    public String createPost(Model model) {
-        model.addAllAttributes(Map.of("formTitle", "Create Post", "title", "", "body", "", "buttonValue", "Post"));
-        return "PostForm";
-    }
-
-    @RequestMapping("/post/{id}")
-    public String getPost(@PathVariable UUID id, Model model) {
-        Post post = postService.getPost(id);
-        model.addAttribute("post", post);
-        model.addAttribute("subtitle", String.format(post.getAuthor().getDisplayname() + " posted on " + new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY).format(post.getUpdated_at())));
-        return "Post";
     }
 
     @GetMapping(value = "/favicon.ico")
@@ -68,13 +43,49 @@ public class HtmxController {
         return resource.getContentAsByteArray();
     }
 
-    @GetMapping("/posts")
+    @GetMapping("/htmx/login")
+    public String login(Model model, @CookieValue(value = "jwt", required = false) String jwtCookie) {
+        model.addAttribute("loggedIn", jwtCookie != null);
+        return "Login";
+    }
+
+    @GetMapping("/htmx/logout")
+    public String logout(Model model, HttpServletResponse response) {
+        model.addAllAttributes(Map.of("posts", postService.getPosts(), "loggedIn", false));
+        Cookie cookie = new Cookie("jwt", "");
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "index";
+    }
+
+    @GetMapping("/htmx/register")
+    public String register(Model model, @CookieValue(value = "jwt", required = false) String jwtCookie) {
+        model.addAllAttributes(Map.of("disabled", true, "loggedIn", jwtCookie != null));
+        return "Register";
+    }
+
+    @GetMapping("/htmx/post/new")
+    public String createPost(Model model) {
+        model.addAllAttributes(Map.of("formTitle", "Create Post", "title", "", "body", "", "buttonValue", "Post"));
+        return "PostForm";
+    }
+
+    @RequestMapping("/htmx/post/{id}")
+    public String getPost(@PathVariable UUID id, Model model) {
+        Post post = postService.getPost(id);
+        model.addAttribute("post", post);
+        model.addAttribute("subtitle", String.format(post.getAuthor().getDisplayname() + " posted on " + new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY).format(post.getUpdated_at())));
+        return "Post";
+    }
+
+    @GetMapping("/htmx/posts")
     public String getPosts(Model model) {
         model.addAttribute("posts", postService.getPosts());
         return "fragments/Posts";
     }
 
-    @RequestMapping("/post/{id}/edit")
+    @RequestMapping("/htmx/post/{id}/edit")
     public String editPost(@PathVariable UUID id, Model model) {
         Post post = postService.getPost(id);
         model.addAllAttributes(Map.of("formTitle", "Edit Post", "title", post.getTitle(), "body", post.getBody(), "buttonValue", "Update"));
