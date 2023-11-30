@@ -44,6 +44,10 @@ public class PostService {
         return postRepository.save(post);
     }
 
+    public Post addPost(Post post) {
+        return postRepository.save(post);
+    }
+
     public Post updatePost(UUID id, Post post, String token) {
         User user = userRepository.findByUsername(jwtService.extractUsername(token.split(" ")[1])).get();
         Post localPost = postRepository.getReferenceById(id);
