@@ -7,7 +7,7 @@
                 <button
                         class="px-4 py-2 rounded-xl bg-gray-700 hover:bg-gray-600 text-white"
                         hx-target="#main"
-                        hx-swap="innerHtml"
+                        hx-swap="innerHTML"
                         th:if="${isOwner}"
                         th:attr="hx-get='/htmx/post/' + ${post.id} + '/edit'"
                 >
@@ -15,6 +15,8 @@
                 </button>
                 <button
                         class="px-4 py-2 rounded-xl bg-gray-700 hover:bg-gray-600 text-white"
+                        hx-target="#body"
+                        hx-swap="innerHTML"
                         th:if="${isOwner}"
                         th:attr="hx-delete='/htmx/post/' + ${post.id}"
                 >
