@@ -3,6 +3,7 @@ package com.bachelorhtmx.backend.htmx;
 import com.bachelorhtmx.backend.config.JwtService;
 import com.bachelorhtmx.backend.post.Post;
 import com.bachelorhtmx.backend.post.PostService;
+import com.bachelorhtmx.backend.user.User;
 import com.bachelorhtmx.backend.user.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -50,9 +51,7 @@ public class HtmxController {
         if (jwtCookie == null) {
             loggedIn = false;
         } else {
-            String username = jwtService.extractUsername(jwtCookie);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            loggedIn = jwtService.isTokenValid(jwtCookie, userDetails);
+            loggedIn = isValidJwtCookie(jwtCookie);
         }
 
         model.addAllAttributes(Map.of("posts", postService.getPosts(), "loggedIn", loggedIn));
@@ -87,40 +86,80 @@ public class HtmxController {
         return "Register";
     }
 
-    @GetMapping("/htmx/post/new")
-    public String createPost(Model model) {
-        model.addAllAttributes(Map.of("formTitle", "Create Post", "title", "", "body", "", "buttonValue", "Post"));
-        return "PostForm";
-    }
-
-    @RequestMapping("/htmx/post/{id}")
-    public String getPost(@PathVariable UUID id, Model model, @CookieValue(value = "jwt", required = false) String jwtCookie) {
-        final Boolean isOwner;
-        Post post = postService.getPost(id);
-
-        if (jwtCookie.isEmpty()) {
-            isOwner = false;
-        } else {
-            String username = jwtService.extractUsername(jwtCookie);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            isOwner = post.getAuthor().getUsername().equals(username) && jwtService.isTokenValid(jwtCookie, userDetails);
-        }
-
-        model.addAllAttributes(Map.of("post", post, "isOwner", isOwner, "subtitle", String.format(post.getAuthor().getDisplayname() + " posted on " + new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY).format(post.getUpdated_at()))));
-
-        return "Post";
-    }
-
     @GetMapping("/htmx/posts")
     public String getPosts(Model model) {
         model.addAttribute("posts", postService.getPosts());
         return "fragments/Posts";
     }
 
-    @RequestMapping("/htmx/post/{id}/edit")
+    @GetMapping("/htmx/post/new")
+    public String getCreatePost(Model model) {
+        model.addAllAttributes(Map.of("formTitle", "Create Post", "title", "", "body", "", "buttonValue", "Post", "endpointPath", "/htmx/post/new"));
+        return "PostForm";
+    }
+
+    @PostMapping("/htmx/post/new")
+    public String createPost(Model model, @CookieValue(value = "jwt", required = true) String jwtCookie, @RequestParam Map<String, String> reqBody) {
+        String title = reqBody.get("title");
+        String body = reqBody.get("body");
+
+        if (title == null || title.isEmpty()) {
+            model.addAllAttributes(Map.of("formTitle", "Create Post", "title", "", "body", "", "buttonValue", "Post", "endpointPath", "/htmx/post/new"));
+            return "PostForm";
+        }
+
+        if (isValidJwtCookie(jwtCookie)) {
+            User user = userService.getUserByUsername(jwtService.extractUsername(jwtCookie));
+            postService.addPost(new Post(title, body, user));
+            model.addAllAttributes(Map.of("posts", postService.getPosts(), "loggedIn", true));
+        } else {
+            model.addAllAttributes(Map.of("posts", postService.getPosts(), "loggedIn", false));
+        }
+        return "fragments/Posts";
+    }
+
+    @RequestMapping("/htmx/post/{id}")
+    public String getPost(@PathVariable UUID id, Model model, @CookieValue(value = "jwt", required = false) String jwtCookie) {
+        Post post = postService.getPost(id);
+        model.addAllAttributes(Map.of("post", post, "isOwner", isOwner(jwtCookie, post), "subtitle", String.format(post.getAuthor().getDisplayname() + " posted on " + new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY).format(post.getUpdated_at()))));
+
+        return "Post";
+    }
+
+    @DeleteMapping("/htmx/post/{id}")
+    public String deletePost(@PathVariable UUID id, Model model, @CookieValue(value = "jwt", required = true) String jwtCookie, HttpServletResponse response) {
+        Post post = postService.getPost(id);
+        if (isOwner(jwtCookie, post)) {
+            postService.deletePost(id);
+            model.addAllAttributes(Map.of("posts", postService.getPosts(), "loggedIn", true));
+        } else {
+            model.addAllAttributes(Map.of("posts", postService.getPosts(), "loggedIn", false));
+            Cookie cookie = new Cookie("jwt", "");
+            cookie.setPath("/");
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+        }
+        return "index";
+    }
+
+    @PostMapping("/htmx/post/{id}/edit")
     public String editPost(@PathVariable UUID id, Model model) {
         Post post = postService.getPost(id);
         model.addAllAttributes(Map.of("formTitle", "Edit Post", "title", post.getTitle(), "body", post.getBody(), "buttonValue", "Update"));
         return "PostForm";
+    }
+
+    private Boolean isValidJwtCookie(String jwtCookie) {
+        String username = jwtService.extractUsername(jwtCookie);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        return jwtService.isTokenValid(jwtCookie, userDetails);
+    }
+
+    private Boolean isOwner(String jwtCookie, Post post) {
+        if (jwtCookie.isEmpty())
+            return false;
+
+        String username = jwtService.extractUsername(jwtCookie);
+        return isValidJwtCookie(jwtCookie) && post.getAuthor().getUsername().equals(username);
     }
 }
