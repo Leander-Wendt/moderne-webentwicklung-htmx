@@ -1,11 +1,15 @@
 package com.bachelorhtmx.backend.htmx;
 
+import com.bachelorhtmx.backend.config.JwtService;
 import com.bachelorhtmx.backend.post.Post;
 import com.bachelorhtmx.backend.post.PostService;
+import com.bachelorhtmx.backend.user.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,20 +24,38 @@ import java.util.UUID;
 public class HtmxController {
 
     // TODO:
+    // FIX BE Server Security, validate JWTs !!!!
     // Form Input Validation
     // Auth Flow
     // Dynamic nav
     // https://stackoverflow.com/questions/19281821/spring-mvc-when-to-use-cookievalue
     // https://attacomsian.com/blog/cookies-spring-boot
     private final PostService postService;
+    private final JwtService jwtService;
+    private final UserService userService;
 
-    public HtmxController(PostService postService) {
+    private final UserDetailsService userDetailsService;
+
+    public HtmxController(PostService postService, JwtService jwtService, UserService userService, UserDetailsService userDetailsService) {
         this.postService = postService;
+        this.jwtService = jwtService;
+        this.userService = userService;
+        this.userDetailsService = userDetailsService;
     }
 
     @GetMapping("/")
     public String index(Model model, @CookieValue(value = "jwt", required = false) String jwtCookie) {
-        model.addAllAttributes(Map.of("posts", postService.getPosts(), "loggedIn", jwtCookie != null));
+        Boolean loggedIn;
+
+        if (jwtCookie == null) {
+            loggedIn = false;
+        } else {
+            String username = jwtService.extractUsername(jwtCookie);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            loggedIn = jwtService.isTokenValid(jwtCookie, userDetails);
+        }
+
+        model.addAllAttributes(Map.of("posts", postService.getPosts(), "loggedIn", loggedIn));
         return "index.html";
     }
 
@@ -72,10 +94,20 @@ public class HtmxController {
     }
 
     @RequestMapping("/htmx/post/{id}")
-    public String getPost(@PathVariable UUID id, Model model) {
+    public String getPost(@PathVariable UUID id, Model model, @CookieValue(value = "jwt", required = false) String jwtCookie) {
+        final Boolean isOwner;
         Post post = postService.getPost(id);
-        model.addAttribute("post", post);
-        model.addAttribute("subtitle", String.format(post.getAuthor().getDisplayname() + " posted on " + new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY).format(post.getUpdated_at())));
+
+        if (jwtCookie.isEmpty()) {
+            isOwner = false;
+        } else {
+            String username = jwtService.extractUsername(jwtCookie);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            isOwner = post.getAuthor().getUsername().equals(username) && jwtService.isTokenValid(jwtCookie, userDetails);
+        }
+
+        model.addAllAttributes(Map.of("post", post, "isOwner", isOwner, "subtitle", String.format(post.getAuthor().getDisplayname() + " posted on " + new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY).format(post.getUpdated_at()))));
+
         return "Post";
     }
 
