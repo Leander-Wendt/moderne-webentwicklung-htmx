@@ -118,7 +118,38 @@ public class HtmxController {
         return "fragments/Posts";
     }
 
-    @RequestMapping("/htmx/post/{id}")
+    @GetMapping("/htmx/post/{id}/edit")
+    public String editPost(@PathVariable UUID id, Model model) {
+        Post post = postService.getPost(id);
+        model.addAllAttributes(Map.of("formTitle", "Edit Post", "title", post.getTitle(), "body", post.getBody(), "buttonValue", "Update", "endpointPath", "/htmx/post/" + id + "/edit"));
+        return "PostForm";
+    }
+
+    @PostMapping("/htmx/post/{id}/edit")
+    public String editPost(@PathVariable UUID id, Model model, @CookieValue(value = "jwt", required = true) String jwtCookie, @RequestParam Map<String, String> reqBody, HttpServletResponse response) {
+        String title = reqBody.get("title");
+        String body = reqBody.get("body");
+
+        if (title == null || title.isEmpty()) {
+            model.addAllAttributes(Map.of("formTitle", "Edit Post", "title", "", "body", body, "buttonValue", "Update", "endpointPath", "/htmx/post/" + id + "/edit"));
+            return "PostForm";
+        }
+
+        if (isValidJwtCookie(jwtCookie)) {
+            User user = userService.getUserByUsername(jwtService.extractUsername(jwtCookie));
+            postService.updatePost(id, new Post(title, body, user), user);
+            model.addAllAttributes(Map.of("posts", postService.getPosts(), "loggedIn", true));
+        } else {
+            model.addAllAttributes(Map.of("posts", postService.getPosts(), "loggedIn", false));
+            Cookie cookie = new Cookie("jwt", "");
+            cookie.setPath("/");
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+        }
+        return "index";
+    }
+
+    @GetMapping("/htmx/post/{id}")
     public String getPost(@PathVariable UUID id, Model model, @CookieValue(value = "jwt", required = false) String jwtCookie) {
         Post post = postService.getPost(id);
         model.addAllAttributes(Map.of("post", post, "isOwner", isOwner(jwtCookie, post), "subtitle", String.format(post.getAuthor().getDisplayname() + " posted on " + new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY).format(post.getUpdated_at()))));
@@ -140,13 +171,6 @@ public class HtmxController {
             response.addCookie(cookie);
         }
         return "index";
-    }
-
-    @PostMapping("/htmx/post/{id}/edit")
-    public String editPost(@PathVariable UUID id, Model model) {
-        Post post = postService.getPost(id);
-        model.addAllAttributes(Map.of("formTitle", "Edit Post", "title", post.getTitle(), "body", post.getBody(), "buttonValue", "Update"));
-        return "PostForm";
     }
 
     private Boolean isValidJwtCookie(String jwtCookie) {

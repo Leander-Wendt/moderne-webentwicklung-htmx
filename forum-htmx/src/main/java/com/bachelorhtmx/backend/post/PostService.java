@@ -48,6 +48,21 @@ public class PostService {
         return postRepository.save(post);
     }
 
+    public Post updatePost(UUID id, Post post, User user) {
+        Post localPost = postRepository.getReferenceById(id);
+
+        if (user.getUsername() != localPost.getAuthor().getUsername()) {
+            throw new ApiForbiddenException("You are not allowed to change the state of that resource.");
+        }
+        if (localPost == null) {
+            throw new EntityNotFoundException();
+        }
+        localPost.setTitle(post.getTitle());
+        localPost.setBody(post.getBody());
+        localPost.setUpdated_at(post.getUpdated_at());
+        return postRepository.save(localPost);
+    }
+
     public Post updatePost(UUID id, Post post, String token) {
         User user = userRepository.findByUsername(jwtService.extractUsername(token.split(" ")[1])).get();
         Post localPost = postRepository.getReferenceById(id);
