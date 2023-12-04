@@ -180,7 +180,7 @@ public class HtmxController {
     }
 
     private Boolean isOwner(String jwtCookie, Post post) {
-        if (jwtCookie.isEmpty())
+        if (jwtCookie == null || jwtCookie.isEmpty())
             return false;
 
         String username = jwtService.extractUsername(jwtCookie);
