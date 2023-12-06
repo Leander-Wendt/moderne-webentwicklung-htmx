@@ -25,12 +25,7 @@ import java.util.UUID;
 public class HtmxController {
 
     // TODO:
-    // FIX BE Server Security, validate JWTs !!!!
-    // Form Input Validation
-    // Auth Flow
-    // Dynamic nav
-    // https://stackoverflow.com/questions/19281821/spring-mvc-when-to-use-cookievalue
-    // https://attacomsian.com/blog/cookies-spring-boot
+    // FIX BE Server Security, validate JWTs, also check react project !!!!
     private final PostService postService;
     private final JwtService jwtService;
     private final UserService userService;
