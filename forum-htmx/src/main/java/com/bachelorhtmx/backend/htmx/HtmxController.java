@@ -23,9 +23,6 @@ import java.util.UUID;
 
 @Controller
 public class HtmxController {
-
-    // TODO:
-    // FIX BE Server Security, validate JWTs, also check react project !!!!
     private final PostService postService;
     private final JwtService jwtService;
     private final UserService userService;
