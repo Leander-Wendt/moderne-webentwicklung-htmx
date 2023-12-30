@@ -1,7 +1,5 @@
 FROM maven:3.9.6-eclipse-temurin-21-jammy
 
-ENV DB_URL="jdbc:postgresql://localhost:5432/postgres"
-
 WORKDIR /app
 
 COPY .mvn/ .mvn
