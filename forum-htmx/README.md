@@ -11,7 +11,7 @@ Eine Maven Installation wird benötigt. [Hier](https://maven.apache.org/download
 
 Es wird ebenfalls eine aktive, auf `localhost:5432` laufende Postgres Datenbank mit dem Standarduser "postgres" und dem Standardpasswort "123" benötigt. Alternativ kann diese Konfiguration in den application.properties angepasst werden.  
 
-Folgender Befehl startet einen postgres Docker Container mit entsprechender Konfiguration:
+Folgender Befehl startet einen postgres Docker Container mit entsprechender Konfiguration:  
 `docker run --name postgres -e POSTGRES_PASSWORD=123 -d postgres:alpine3.18`
   
 Folgende Befehle müssen für die Installation und den Start ausgeführt werden:
