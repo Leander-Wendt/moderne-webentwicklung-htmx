@@ -8,9 +8,9 @@ import java.util.Properties;
 @SpringBootApplication
 public class BackendApplication {
     public static void main(String[] args) {
-        if (System.getenv("DB_URL") == null) {
+        if (System.getenv("DB_URL") != null) {
             Properties appProps = new Properties();
-            appProps.setProperty("spring.datasource.url", "jdbc:postgresql://localhost:5432/postgres");
+            appProps.setProperty("spring.datasource.url", System.getenv("DB_URL"));
         }
 
         SpringApplication.run(BackendApplication.class, args);
