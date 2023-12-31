@@ -6,4 +6,4 @@ In diesem Repository sind die Projekte für HTMX und React zu finden. Die Readme
 
 - [HTMX & Spring Boot](https://gitlab.bht-berlin.de/s52888/moderne-webentwicklung-htmx/-/blob/main/forum-htmx/README.md)
 - [Spring Boot JSON API für React](https://gitlab.bht-berlin.de/s52888/moderne-webentwicklung-htmx/-/blob/main/forum-react/backend/README.md)
-- [React Frontendcode](https://gitlab.bht-berlin.de/s52888/moderne-webentwicklung-htmx/-/blob/main/forum-react/frontend/README.md)
+- [React Frontend](https://gitlab.bht-berlin.de/s52888/moderne-webentwicklung-htmx/-/blob/main/forum-react/frontend/README.md)
