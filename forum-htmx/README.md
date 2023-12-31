@@ -1,6 +1,6 @@
 # HTMX & Spring Boot
-Das Aufsetzen des Servers kann mithilfe von Docker oder Maven erfolgen.
 ## Installation
+Das Aufsetzen des Servers kann mithilfe von Docker oder Maven erfolgen.
 ### Docker
 Ein aktiver Docker Daemon ist benötigt, um den folgenden Befehl auszuführen.  
 Führe im Verzeichnis dieser Readme `docker-compose up` aus.  
