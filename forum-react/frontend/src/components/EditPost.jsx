@@ -57,7 +57,6 @@ export const EditPost = () => {
 		inputs.created_at = post.created_at;
 		inputs.id = id;
 		inputs.author = post.author;
-		console.log(inputs);
 		dispatch(editPost(inputs));
 		navigate("/");
 	};
