@@ -1,5 +1,5 @@
 # Spring Boot JSON API für React
-
+Das Aufsetzen des Servers kann mithilfe von Docker oder Maven erfolgen.
 ## Installation
 ### Docker
 Ein aktiver Docker Daemon ist benötigt, um den folgenden Befehl auszuführen.  
