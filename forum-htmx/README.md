@@ -1,8 +1,8 @@
 # HTMX & Spring Boot
-
+Das Aufsetzen des Servers kann mithilfe von Docker oder Maven erfolgen.
 ## Installation
 ### Docker
-Ein aktiver Docker Daemon ist benötigt, um den folgenden Befehl auszuführen.
+Ein aktiver Docker Daemon ist benötigt, um den folgenden Befehl auszuführen.  
 Führe im Verzeichnis dieser Readme `docker-compose up` aus.  
 Der Server ist nun unter [http://localhost:8080](http://localhost:8080) erreichbar.
 
@@ -14,7 +14,7 @@ Es wird ebenfalls eine aktive, auf `localhost:5432` laufende Postgres Datenbank 
 Folgender Befehl startet einen postgres Docker Container mit entsprechender Konfiguration:  
 `docker run --name postgres -e POSTGRES_PASSWORD=123 -d postgres:alpine3.18`
   
-Folgende Befehle müssen für die Installation und den Start ausgeführt werden:
+Folgende Befehle müssen für die Installation und den Start des Servers ausgeführt werden:
 
    - `mvn clean install`
    - `cd target`
