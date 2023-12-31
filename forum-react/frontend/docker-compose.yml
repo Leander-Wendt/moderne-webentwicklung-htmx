@@ -1,0 +1,32 @@
+version: "3.0"
+
+services:
+  database:
+    image: postgres:alpine3.18
+    ports:
+      - "5432:5432"
+    restart: on-failure
+    environment:
+      POSTGRES_PASSWORD: 123
+
+  backend:
+    depends_on:
+      - database
+    build: ./../backend/
+    restart: no
+    ports:
+      - 8080:8080
+    environment:
+      DB_URL: jdbc:postgresql://database:5432/postgres
+      SPRING_PROFILE: docker
+
+  frontend:
+    depends_on:
+      - database
+      - backend
+    build: ./
+    restart: no
+    ports:
+      - 5173:5173
+    environment:
+      VITE_BE_URL: "http://backend:8080"
