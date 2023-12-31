@@ -65,7 +65,6 @@ export const createPost = createAsyncThunk(
 export const editPost = createAsyncThunk(
 	"post/edit",
 	async ({ id, title, body, userToken, created_at }, { rejectWithValue }) => {
-		console.log(id, title, body, userToken, created_at);
 		try {
 			let data = await fetch(`${backendURL}/posts/${id}`, {
 				method: "PUT",
