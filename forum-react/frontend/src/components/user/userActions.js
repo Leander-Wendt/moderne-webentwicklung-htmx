@@ -1,12 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-const backendURL = "http://127.0.0.1:8080";
+const backedURL = import.meta.env.VITE_BE_URL;
 
 export const registerUser = createAsyncThunk(
 	"auth/register",
 	async ({ username, displayname, password }, { rejectWithValue }) => {
 		try {
-			let data = await fetch(`${backendURL}/auth/register`, {
+			let data = await fetch(`${backedURL}/auth/register`, {
 				method: "post",
 				headers: {
 					"Content-Type": "application/json",
@@ -41,7 +41,7 @@ export const loginUser = createAsyncThunk(
 	"auth/login",
 	async ({ username, password }, { rejectWithValue }) => {
 		try {
-			let data = await fetch(`${backendURL}/auth/login`, {
+			let data = await fetch(`${backedURL}/auth/login`, {
 				method: "post",
 				headers: {
 					"Content-Type": "application/json",
@@ -51,7 +51,7 @@ export const loginUser = createAsyncThunk(
 			})
 				.then((res) => {
 					if (res.ok) {
-						res.json();
+						return res.json();
 					} else {
 						throw new Error("Request failed.");
 					}

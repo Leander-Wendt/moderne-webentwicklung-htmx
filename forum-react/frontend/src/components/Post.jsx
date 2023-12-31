@@ -8,7 +8,7 @@ export const Post = () => {
 	const { userToken, username } = useSelector((state) => state.user);
 	const navigate = useNavigate();
 
-	const backendURL = "http://127.0.0.1:8080";
+	const backendURL = import.meta.env.VITE_BE_URL;
 
 	const fetchPost = async () => {
 		await fetch(`${backendURL}/public/posts/${id}`, {
