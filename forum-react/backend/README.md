@@ -1,6 +1,7 @@
 # Spring Boot JSON API für React
-Das Aufsetzen des Servers kann mithilfe von Docker oder Maven erfolgen.
+Dieser Server liefert die benötigte REST API für das [React Frontend](https://gitlab.bht-berlin.de/s52888/moderne-webentwicklung-htmx/-/tree/main/forum-react/frontend?ref_type=heads).
 ## Installation
+Das Aufsetzen des Servers kann mithilfe von Docker oder Maven erfolgen.
 ### Docker
 Ein aktiver Docker Daemon ist benötigt, um den folgenden Befehl auszuführen.  
 Führe im Verzeichnis dieser Readme `docker-compose up` aus.  
