@@ -9,7 +9,7 @@ Der Server ist nun unter [http://localhost:5173](http://localhost:5173) erreichb
 ### Node 
 Eine Node Installation wird benötigt. [Hier](https://nodejs.org/en/download) gibt es die aktuellste Version.  
 
-Es wird ebenfalls eine aktiver [Backendserver](https://gitlab.bht-berlin.de/s52888/moderne-webentwicklung-htmx/-/tree/main/forum-react/backend?ref_type=heads) benötigt.
+Es wird ebenfalls eine aktiver [Backendserver](https://github.com/Leander-Wendt/moderne-webentwicklung-htmx/blob/main/forum-react/backend/README.md) benötigt.
   
 Folgende Befehle müssen für die Installation und den Start ausgeführt werden:
 
