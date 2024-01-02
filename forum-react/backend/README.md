@@ -1,5 +1,5 @@
 # Spring Boot JSON API für React
-Dieser Server liefert die benötigte REST API für das [React Frontend](https://gitlab.bht-berlin.de/s52888/moderne-webentwicklung-htmx/-/tree/main/forum-react/frontend?ref_type=heads).
+Dieser Server liefert die benötigte REST API für das [React Frontend](https://github.com/Leander-Wendt/moderne-webentwicklung-htmx/blob/main/forum-react/frontend).
 ## Installation
 Das Aufsetzen des Servers kann mithilfe von Docker oder Maven erfolgen.
 ### Docker
